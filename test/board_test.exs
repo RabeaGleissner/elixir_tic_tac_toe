@@ -40,4 +40,12 @@ defmodule BoardTest do
       "X", "X","O"
     ]) == "O"
   end
+
+  test "knows that board is a draw" do
+    assert Board.draw?([
+      "O", "X", "O",
+      "O", "X", "X",
+      "X", "O", "O"
+    ]) == true
+  end
 end

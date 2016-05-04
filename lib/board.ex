@@ -18,10 +18,19 @@ defmodule Board do
     winner?(board, @winning_combinations)
   end
 
+  def draw?(board) do
+    board_full?(board) && !winner?(board)
+  end
+
+  def board_full?(board) do
+    [] = Enum.filter(board, fn(cell) -> cell != "X" && cell != "O" end)
+  end
+
   def winning_mark(board) do
     winning_mark(board, @winning_combinations)
   end
 
+  defp winning_mark(_, []), do: "no winning mark"
   defp winning_mark(board, [line | rest]) do
     if winning_line(board, line) do
       Enum.at(board, elem(line, 0))
