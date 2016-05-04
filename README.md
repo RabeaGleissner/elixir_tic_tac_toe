@@ -1,6 +1,16 @@
 # TicTacToe
 
-**TODO: Add description**
+To run this application, first clone the repo by typing:
+
+`git clone git@github.com:RabeaGleissner/elixir_tic_tac_toe.git`
+
+Then navigate into the directory and type:
+
+ `mix TTT.start`
+
+To run the tests, type:
+
+`mix test`
 
 ## Installation
 
