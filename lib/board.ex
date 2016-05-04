@@ -5,30 +5,28 @@ defmodule Board do
   def place_mark(position, board), do: List.replace_at(board, position - 1, next_player_mark(board))
 
   def next_player_mark(board) do
-    if mark_count("X", board) <= mark_count("O", board) do
+    if more_o_marks(board) do
       "X"
     else
       "O"
     end
   end
 
-  def mark_count(mark, board), do: Enum.count(board, fn(x) -> x == mark end)
+  defp more_o_marks(board), do: mark_count("X", board) <= mark_count("O", board)
 
-  def winner?(board) do
-    winner?(board, @winning_combinations)
-  end
+  def mark_count(mark, board), do: Enum.count(board, fn(cell) -> cell == mark end)
 
-  def draw?(board) do
-    board_full?(board) && !winner?(board)
-  end
+  def game_over?(board), do: winner?(board) || draw?(board)
+
+  def winner?(board), do: winner?(board, @winning_combinations)
+
+  def draw?(board), do: board_full?(board) && !winner?(board)
 
   def board_full?(board) do
     [] = Enum.filter(board, fn(cell) -> cell != "X" && cell != "O" end)
   end
 
-  def winning_mark(board) do
-    winning_mark(board, @winning_combinations)
-  end
+  def winning_mark(board), do: winning_mark(board, @winning_combinations)
 
   defp winning_mark(_, []), do: "no winning mark"
   defp winning_mark(board, [line | rest]) do

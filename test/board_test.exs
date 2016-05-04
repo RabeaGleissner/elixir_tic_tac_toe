@@ -48,4 +48,12 @@ defmodule BoardTest do
       "X", "O", "O"
     ]) == true
   end
+
+   test "knows that game is over" do
+    assert Board.game_over?([
+      "O", "X", "O",
+      "O", "X", "X",
+      "X", "O", "O"
+    ]) == true
+   end
 end
