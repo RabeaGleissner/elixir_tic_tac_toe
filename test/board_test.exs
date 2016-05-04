@@ -24,4 +24,20 @@ defmodule BoardTest do
        7,   8, "X"
     ]) == false
   end
+
+  test "returns winning mark X" do
+    assert Board.winning_mark([
+      "X","X","X",
+      "O","O", 6,
+       7,  8,  9
+    ]) == "X"
+  end
+
+  test "returns winning mark O" do
+    assert Board.winning_mark([
+      "O",  2,  3,
+      "X", "O", 6,
+      "X", "X","O"
+    ]) == "O"
+  end
 end
