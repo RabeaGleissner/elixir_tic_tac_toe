@@ -4,15 +4,7 @@ defmodule Board do
 
   def place_mark(position, board), do: List.replace_at(board, position - 1, next_player_mark(board))
 
-  def next_player_mark(board) do
-    if more_o_marks(board) do
-      "X"
-    else
-      "O"
-    end
-  end
-
-  defp more_o_marks(board), do: mark_count("X", board) <= mark_count("O", board)
+  def next_player_mark(board), do: if more_o_marks(board), do: "X", else: "O"
 
   def mark_count(mark, board), do: Enum.count(board, fn(cell) -> cell == mark end)
 
@@ -39,11 +31,7 @@ defmodule Board do
 
   defp winner?(_, []), do: false
   defp winner?(board, [line | rest]) do
-    if winning_line(board, line) do
-      true
-    else
-      winner?(board, rest)
-    end
+    if winning_line(board, line), do: true, else: winner?(board, rest)
   end
 
   defp winning_line(board, {first, second, third}) do
@@ -53,4 +41,6 @@ defmodule Board do
   defp same_marks?(first, second, third) do
     first == second && second == third
   end
+
+  defp more_o_marks(board), do: mark_count("X", board) <= mark_count("O", board)
 end
