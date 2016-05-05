@@ -20,16 +20,10 @@ defmodule UiTest do
     end) == "Please choose a position:\nPlease choose a position:\n"
   end
 
-  test "it prints an empty board" do
+  test "it prints a board" do
     assert capture_io(fn ->
-      Ui.print_board([1,2,3,4,5,6,7,8,9])
-    end) == "1 | 2 | 3\n4 | 5 | 6\n7 | 8 | 9\n"
-  end
-
-  test "it prints a full board" do
-    assert capture_io(fn ->
-      Ui.print_board([ "X","O","X","O","X","O","O","X","X"])
-    end) == "X | O | X\nO | X | O\nO | X | X\n"
+      Ui.print_board([1,"X",3,4,"O",6,7,8,9])
+    end) == "1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
   end
 
   test "prints game over message for winner X" do

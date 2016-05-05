@@ -20,7 +20,15 @@ defmodule Ui do
   end
 
   def print_board(board) do
-    IO.puts "#{List.first(board)} | #{Enum.at(board, 1)} | #{Enum.at(board, 2)}\n#{Enum.at(board, 3)} | #{Enum.at(board, 4)} | #{Enum.at(board, 5)}\n#{Enum.at(board, 6)} | #{Enum.at(board, 7)} | #{List.last(board)}"
+    IO.puts "#{List.first(board)} | #{Enum.at(board, 1)} | #{Enum.at(board, 2)}\n" <>
+    line <>
+    "#{Enum.at(board, 3)} | #{Enum.at(board, 4)} | #{Enum.at(board, 5)}\n" <>
+    line <>
+    "#{Enum.at(board, 6)} | #{Enum.at(board, 7)} | #{List.last(board)}\n"
+  end
+
+  defp line do
+    "---------\n"
   end
 
   def game_over_message(board) do
