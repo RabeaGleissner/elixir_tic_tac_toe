@@ -2,7 +2,17 @@ defmodule Board do
 
   @winning_combinations [{0,1,2}, {3,4,5}, {6,7,8}, {0,3,6}, {1,4,7}, {2,5,8}, {0,4,8}, {2,4,6}]
 
-  def place_mark(position, board), do: List.replace_at(board, position - 1, next_player_mark(board))
+  def place_mark(position, board) do
+    if position_available?(position, board) do
+      update_board(position, board)
+    else
+      board
+    end
+  end
+
+  defp update_board(position, board) do
+    List.replace_at(board, position - 1, next_player_mark(board))
+  end
 
   def next_player_mark(board), do: if more_o_marks(board), do: "X", else: "O"
 
@@ -19,6 +29,11 @@ defmodule Board do
   end
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
+
+  def position_available?(position, board) do
+    cell = Enum.at(board, position - 1)
+    !(cell == "X" || cell == "O")
+  end
 
   defp winning_mark(_, []), do: nil
   defp winning_mark(board, [line | rest]) do

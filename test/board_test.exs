@@ -60,4 +60,12 @@ defmodule BoardTest do
    test "board is empty" do
      assert Board.board_full?([1,2,3,4,5,6,7,8,9]) == false
    end
+
+  test "knows that the position is unavailable" do
+    assert Board.position_available?(1, [
+      "O",  2,  3,
+      "X", "O", 6,
+      "X", "X","O"
+    ]) == false
+  end
 end
