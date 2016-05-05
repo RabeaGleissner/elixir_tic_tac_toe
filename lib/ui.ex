@@ -1,5 +1,7 @@
 defmodule Ui do
 
+  @clear_screen "\e[H\e[2J"
+
   def ask_for_position do
     IO.puts "Please choose a position:"
     get_users_position
@@ -20,7 +22,7 @@ defmodule Ui do
   end
 
   def print_board(board) do
-    IO.puts "#{List.first(board)} | #{Enum.at(board, 1)} | #{Enum.at(board, 2)}\n" <>
+    IO.puts @clear_screen <> "#{List.first(board)} | #{Enum.at(board, 1)} | #{Enum.at(board, 2)}\n" <>
     line <>
     "#{Enum.at(board, 3)} | #{Enum.at(board, 4)} | #{Enum.at(board, 5)}\n" <>
     line <>
@@ -30,14 +32,14 @@ defmodule Ui do
   def game_over_message(board) do
     IO.puts "Game over!"
     if Board.draw?(board) do
-      IO.puts "It's a draw."
+      IO.puts "It's a draw.\n\n"
     else
-      IO.puts "Winner is #{Board.winning_mark(board)}."
+      IO.puts "Winner is #{Board.winning_mark(board)}.\n\n"
     end
   end
 
   def say_bye do
-    IO.puts "Byyyee... See you next time!"
+    IO.puts @clear_screen <> "Byyyee... See you next time!"
   end
 
   defp clean_input(input) do

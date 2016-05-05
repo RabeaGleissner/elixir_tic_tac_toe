@@ -2,6 +2,8 @@ defmodule UiTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
 
+  @clear_screen "\e[H\e[2J"
+
   test "it asks the user to enter a position" do
     assert capture_io([input: "4\n"], fn ->
       Ui.ask_for_position
@@ -23,7 +25,7 @@ defmodule UiTest do
   test "it prints a board" do
     assert capture_io(fn ->
       Ui.print_board([1,"X",3,4,"O",6,7,8,9])
-    end) == "1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
+    end) == @clear_screen <> "1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
   end
 
   test "prints game over message for winner X" do
@@ -32,7 +34,7 @@ defmodule UiTest do
         "X","O","X",
         "O","X","O",
         "O","X","X"])
-    end) == "Game over!\nWinner is X.\n"
+    end) == "Game over!\nWinner is X.\n\n\n"
   end
 
   test "prints game over message for winner O" do
@@ -41,7 +43,7 @@ defmodule UiTest do
         "X","O","X",
         "O","O","O",
         "O","X","X"])
-    end) == "Game over!\nWinner is O.\n"
+    end) == "Game over!\nWinner is O.\n\n\n"
   end
 
   test "prints game over message for a draw" do
@@ -50,7 +52,7 @@ defmodule UiTest do
         "X","O","X",
         "X","O","O",
         "O","X","X"])
-    end) == "Game over!\nIt's a draw.\n"
+    end) == "Game over!\nIt's a draw.\n\n\n"
   end
 
   test "asks if user wants to play again" do
@@ -81,6 +83,6 @@ defmodule UiTest do
   test "says goodbye" do
     assert capture_io(fn ->
       assert Ui.say_bye
-    end) == "Byyyee... See you next time!\n"
+    end) == @clear_screen <> "Byyyee... See you next time!\n"
   end
 end
