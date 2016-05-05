@@ -32,6 +32,10 @@ defmodule Ui do
     end
   end
 
+  def say_bye do
+    IO.puts "Byyyee... See you next time!"
+  end
+
   defp clean_input(input) do
     input
     |> String.strip

@@ -83,4 +83,10 @@ defmodule UiTest do
     end)
     assert String.contains?(message, "Please reply with 'y' or 'n'.")
   end
+
+  test "says goodbye" do
+    assert capture_io(fn ->
+      assert Ui.say_bye
+    end) == "Byyyee... See you next time!\n"
+  end
 end
