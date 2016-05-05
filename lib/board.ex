@@ -15,7 +15,7 @@ defmodule Board do
   def draw?(board), do: board_full?(board) && !winner?(board)
 
   def board_full?(board) do
-    [] = Enum.filter(board, fn(cell) -> cell != "X" && cell != "O" end)
+    [] == Enum.filter(board, fn(cell) -> cell != "X" && cell != "O" end)
   end
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
