@@ -20,7 +20,7 @@ defmodule UiTest do
   test "it asks for a position again if user input is invalid" do
     assert capture_io([input: "n\n4\n"], fn ->
       Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
-    end) == "Please choose a position:\nPlease choose a position:\n"
+    end) == "Please choose a position:\nThis position is not available.\nPlease choose a position:\n"
   end
 
   test "it prints a board" do
