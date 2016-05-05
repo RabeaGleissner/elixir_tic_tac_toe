@@ -58,4 +58,29 @@ defmodule UiTest do
         "O","X","X"])
     end) == "Game over!\nIt's a draw.\n"
   end
+
+  test "asks if user wants to play again" do
+    assert capture_io([input: "y"], fn ->
+      Ui.play_again?
+    end) == "Play again? (y/n)\n"
+  end
+
+  test "returns true when user wants to play again" do
+    capture_io([input: "y"], fn ->
+      assert Ui.play_again? == true
+    end)
+  end
+
+  test "returns false when user does not want to play again" do
+    capture_io([input: "n"], fn ->
+      assert Ui.play_again? == false
+    end)
+  end
+
+  test "displays error message on invalid input for replay" do
+    message = capture_io([input: "maybe\nn"], fn ->
+      Ui.play_again?
+    end)
+    assert String.contains?(message, "Please reply with 'y' or 'n'.")
+  end
 end

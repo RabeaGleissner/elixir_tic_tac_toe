@@ -7,11 +7,16 @@ defmodule Ui do
 
   def get_users_position do
     input = clean_input(IO.gets(""))
-    if valid?(input) do
+    if valid_position?(input) do
       convert_to_integer(input)
     else
       ask_for_position
     end
+  end
+
+  def play_again? do
+    IO.puts "Play again? (y/n)"
+    get_users_replay_choice
   end
 
   def print_board(board) do
@@ -28,10 +33,25 @@ defmodule Ui do
   end
 
   defp clean_input(input) do
-    String.strip(input)
+    input
+    |> String.strip
+    |> String.downcase
   end
 
-  defp valid?(input) do
+  defp get_users_replay_choice do
+    input = clean_input(IO.gets(""))
+    cond do
+      input == "y" ->
+        true
+      input == "n" ->
+        false
+      true ->
+        IO.puts "Please reply with 'y' or 'n'."
+        play_again?
+    end
+  end
+
+  defp valid_position?(input) do
     valid_numbers = [1,2,3,4,5,6,7,8,9]
     if is_number?(input) do
       Enum.find(valid_numbers, false, fn(num) ->
