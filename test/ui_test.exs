@@ -31,4 +31,31 @@ defmodule UiTest do
       Ui.print_board([ "X","O","X","O","X","O","O","X","X"])
     end) == "X | O | X\nO | X | O\nO | X | X\n"
   end
+
+  test "prints game over message for winner X" do
+    assert capture_io(fn ->
+      Ui.game_over_message([
+        "X","O","X",
+        "O","X","O",
+        "O","X","X"])
+    end) == "Game over!\nWinner is X.\n"
+  end
+
+  test "prints game over message for winner O" do
+    assert capture_io(fn ->
+      Ui.game_over_message([
+        "X","O","X",
+        "O","O","O",
+        "O","X","X"])
+    end) == "Game over!\nWinner is O.\n"
+  end
+
+  test "prints game over message for a draw" do
+    assert capture_io(fn ->
+      Ui.game_over_message([
+        "X","O","X",
+        "X","O","O",
+        "O","X","X"])
+    end) == "Game over!\nIt's a draw.\n"
+  end
 end

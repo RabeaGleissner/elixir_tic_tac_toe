@@ -18,6 +18,15 @@ defmodule Ui do
     IO.puts "#{List.first(board)} | #{Enum.at(board, 1)} | #{Enum.at(board, 2)}\n#{Enum.at(board, 3)} | #{Enum.at(board, 4)} | #{Enum.at(board, 5)}\n#{Enum.at(board, 6)} | #{Enum.at(board, 7)} | #{List.last(board)}"
   end
 
+  def game_over_message(board) do
+    IO.puts "Game over!"
+    if Board.draw?(board) do
+      IO.puts "It's a draw."
+    else
+      IO.puts "Winner is #{Board.winning_mark(board)}."
+    end
+  end
+
   defp clean_input(input) do
     String.strip(input)
   end
