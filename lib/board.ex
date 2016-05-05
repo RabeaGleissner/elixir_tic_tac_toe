@@ -20,7 +20,7 @@ defmodule Board do
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
 
-  defp winning_mark(_, []), do: "no winning mark"
+  defp winning_mark(_, []), do: nil
   defp winning_mark(board, [line | rest]) do
     if winning_line(board, line) do
       Enum.at(board, elem(line, 0))

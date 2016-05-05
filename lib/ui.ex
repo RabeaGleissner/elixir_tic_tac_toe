@@ -1,4 +1,5 @@
 defmodule Ui do
+
   def ask_for_position do
     IO.puts "Please choose a position:"
     get_users_position
@@ -13,11 +14,15 @@ defmodule Ui do
     end
   end
 
-  def clean_input(input) do
+  def print_board(board) do
+    IO.puts "#{List.first(board)} | #{Enum.at(board, 1)} | #{Enum.at(board, 2)}\n#{Enum.at(board, 3)} | #{Enum.at(board, 4)} | #{Enum.at(board, 5)}\n#{Enum.at(board, 6)} | #{Enum.at(board, 7)} | #{List.last(board)}"
+  end
+
+  defp clean_input(input) do
     String.strip(input)
   end
 
-  def valid?(input) do
+  defp valid?(input) do
     valid_numbers = [1,2,3,4,5,6,7,8,9]
     if is_number?(input) do
       Enum.find(valid_numbers, false, fn(num) ->
@@ -28,7 +33,7 @@ defmodule Ui do
     end
   end
 
- defp convert_to_integer(string) do
+  defp convert_to_integer(string) do
     String.to_integer(string)
   end
 
