@@ -2,17 +2,17 @@ defmodule Ui do
 
   @clear_screen "\e[H\e[2J"
 
-  def ask_for_position do
+  def ask_for_position(board) do
     IO.puts "Please choose a position:"
-    get_users_position
+    get_users_position(board)
   end
 
-  def get_users_position do
+  def get_users_position(board) do
     input = clean_input(IO.gets(""))
-    if valid_position?(input) do
+    if valid_position?(input, board) do
       convert_to_integer(input)
     else
-      ask_for_position
+      ask_for_position(board)
     end
   end
 
@@ -61,12 +61,9 @@ defmodule Ui do
     end
   end
 
-  defp valid_position?(input) do
-    valid_numbers = [1,2,3,4,5,6,7,8,9]
+  defp valid_position?(input, board) do
     if is_number?(input) do
-      Enum.find(valid_numbers, false, fn(num) ->
-        num == convert_to_integer(input)
-      end)
+      Board.position_available?(convert_to_integer(input), board)
     else
       false
     end
@@ -83,5 +80,4 @@ defmodule Ui do
   defp line do
     "---------\n"
   end
-
 end
