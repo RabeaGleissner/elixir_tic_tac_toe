@@ -27,10 +27,6 @@ defmodule Ui do
     "#{Enum.at(board, 6)} | #{Enum.at(board, 7)} | #{List.last(board)}\n"
   end
 
-  defp line do
-    "---------\n"
-  end
-
   def game_over_message(board) do
     IO.puts "Game over!"
     if Board.draw?(board) do
@@ -81,4 +77,9 @@ defmodule Ui do
   defp is_number?(input) do
     Integer.parse(input) != :error
   end
+
+  defp line do
+    "---------\n"
+  end
+
 end
