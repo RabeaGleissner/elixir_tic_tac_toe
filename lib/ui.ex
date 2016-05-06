@@ -58,7 +58,6 @@ defmodule Ui do
       IO.puts "Winner is #{winner}.\n\n"
     end
 
-
     def say_bye do
       IO.puts @clear_screen <> "Byyyee... See you next time!"
     end
