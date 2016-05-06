@@ -9,12 +9,21 @@ defmodule Ui do
 
     def get_users_position(board) do
       input = clean_input(IO.gets(""))
-      if valid_position?(input, board) do
-        convert_to_integer(input)
-      else
-        invalid_position_error
-        ask_for_position(board)
+      case valid_position?(input, board) do
+        {:valid, position} -> position
+        {:taken, position} -> move_was_taken(board, position)
+        :not_a_number -> was_not_a_number(board, input)
       end
+    end
+
+    defp move_was_taken(board, position) do
+      IO.puts "#{position} is already taken!"
+      ask_for_position(board)
+    end
+
+    defp was_not_a_number(board, input) do
+      IO.puts "#{input} is invalid. We need a number!"
+      ask_for_position(board)
     end
 
     def play_again? do
@@ -66,26 +75,15 @@ defmodule Ui do
       IO.puts "Please reply with 'y' or 'n'."
     end
 
-    defp invalid_position_error do
-      IO.puts "This position is not available."
-    end
-
     defp valid_position?(input, board) do
       input
       |> number
       |> available_on_board?(board)
     end
 
-    defp available_on_board?(:not_a_number, _), do: false
+    defp available_on_board?(:not_a_number, _), do: :not_a_number
     defp available_on_board?(position, board) do
-      case Board.position_available?(board, position) do
-        {:valid, _} -> true
-        _ -> false
-      end
-    end
-
-    defp convert_to_integer(string) do
-      String.to_integer(string)
+      Board.position_available?(board, position)
     end
 
     defp number(input) do
