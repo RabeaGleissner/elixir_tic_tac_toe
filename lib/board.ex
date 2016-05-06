@@ -10,6 +10,23 @@ defmodule Board do
     end
   end
 
+  def place_mark_2(position, board) do
+    board
+    |> valid?(position)
+    |> update_my_board(board)
+  end
+
+  defp valid?(board, position) do
+    if position_available?(position, board) do
+      {:valid, position}
+    else
+      {:taken, position}
+    end
+  end
+
+  defp update_my_board({:valid, position}, board), do: {:ok, update_board(position, board)}
+  defp update_my_board(error, _), do: error
+
   def next_player_mark(board), do: if more_o_marks(board), do: "X", else: "O"
 
   def mark_count(mark, board), do: Enum.count(board, fn(cell) -> cell == mark end)
@@ -21,8 +38,12 @@ defmodule Board do
   def draw?(board), do: board_full?(board) && !winner?(board)
 
   def board_full?(board) do
-    [] == Enum.filter(board, fn(cell) -> cell != "X" && cell != "O" end)
+    board
+    |> Enum.reject(&mark?/1)
+    |> Enum.empty?
   end
+
+  defp mark?(mark), do: mark in ["X", "O"]
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
 
