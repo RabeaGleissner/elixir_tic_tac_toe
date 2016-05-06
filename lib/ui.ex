@@ -48,12 +48,16 @@ defmodule Ui do
 
     def game_over_message(board) do
       IO.puts "Game over!"
-      if Board.draw?(board) do
-        IO.puts "It's a draw.\n\n"
-      else
-        IO.puts "Winner is #{Board.winning_mark(board)}.\n\n"
-      end
+      board
+      |> Board.result
+      |> message
     end
+
+    defp message(:draw), do: IO.puts "It's a draw.\n\n"
+    defp message({:winner, winner}) do
+      IO.puts "Winner is #{winner}.\n\n"
+    end
+
 
     def say_bye do
       IO.puts @clear_screen <> "Byyyee... See you next time!"
@@ -66,16 +70,16 @@ defmodule Ui do
     end
 
     defp get_users_replay_choice do
-      input = clean_input(IO.gets(""))
-      cond do
-        input == "y" ->
-          true
-        input == "n" ->
-          false
-        true ->
-          invalid_replay_choice_error
-          play_again?
-      end
+      IO.gets("")
+      |> clean_input
+      |> replay?
+    end
+
+    defp replay?("y"), do: true
+    defp replay?("n"), do: false
+    defp replay?(_) do
+      invalid_replay_choice_error
+      play_again?
     end
 
     defp invalid_replay_choice_error do

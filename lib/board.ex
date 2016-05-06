@@ -44,6 +44,14 @@ defmodule Board do
     end
   end
 
+  def result(board) do
+    if draw?(board) do
+      :draw
+    else
+      {:winner, winning_mark(board)}
+    end
+  end
+
   defp winning_mark(_, []), do: nil
   defp winning_mark(board, [line | rest]) do
     if winning_line(board, line) do
