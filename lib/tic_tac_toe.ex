@@ -14,7 +14,7 @@ defmodule TicTacToe do
   def play(board, true), do: game_over(board)
   def play(board, false) do
     Ui.print_board(board)
-    next_board = Board.place_mark(Ui.ask_for_position(board), board)
+    {:ok, next_board} = Board.place_mark(board, Ui.ask_for_position(board))
     play(next_board, Board.game_over?(next_board))
   end
 

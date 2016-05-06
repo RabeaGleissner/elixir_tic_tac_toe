@@ -72,7 +72,10 @@ defmodule Ui do
 
     defp valid_position?(input, board) do
       if is_number?(input) do
-        Board.position_available?(convert_to_integer(input), board)
+        case Board.position_available?(board, convert_to_integer(input)) do
+          {:valid, _} -> true
+          _ -> false
+        end
       else
         false
       end

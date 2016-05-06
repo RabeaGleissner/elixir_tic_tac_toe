@@ -1,16 +1,12 @@
 defmodule BoardTest do
   use ExUnit.Case
 
-  test "places a mark on an empty board" do
-    assert Board.place_mark(1, [1,2,3,4,5,6,7,8,9]) == ["X",2,3,4,5,6,7,8,9]
-  end
-
   test "places a mark on an empty board 2" do
-    assert Board.place_mark_2(1, [1,2,3,4,5,6,7,8,9]) == {:ok, ["X",2,3,4,5,6,7,8,9]}
+    assert Board.place_mark([1,2,3,4,5,6,7,8,9], 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
   end
 
   test "cannot place mark in a position that is taken" do
-    assert Board.place_mark_2(1, ["X",2,3,4,5,6,7,8,9]) == {:taken, 1}
+    assert Board.place_mark(["X",2,3,4,5,6,7,8,9], 1) == {:taken, 1}
   end
 
   test "returns next player mark" do
@@ -70,10 +66,18 @@ defmodule BoardTest do
    end
 
   test "knows that the position is unavailable" do
-    assert Board.position_available?(1, [
+    assert Board.position_available?([
       "O",  2,  3,
       "X", "O", 6,
       "X", "X","O"
-    ]) == false
+    ], 1) == {:taken, 1}
+  end
+
+  test "knows that the position is available" do
+    assert Board.position_available?([
+      "O",  2,  3,
+      "X", "O", 6,
+      "X", "X","O"
+    ], 2) == {:valid, 2}
   end
 end
