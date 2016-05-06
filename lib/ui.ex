@@ -71,13 +71,16 @@ defmodule Ui do
     end
 
     defp valid_position?(input, board) do
-      if is_number?(input) do
-        case Board.position_available?(board, convert_to_integer(input)) do
-          {:valid, _} -> true
-          _ -> false
-        end
-      else
-        false
+      input
+      |> number
+      |> available_on_board?(board)
+    end
+
+    defp available_on_board?(:not_a_number, _), do: false
+    defp available_on_board?(position, board) do
+      case Board.position_available?(board, position) do
+        {:valid, _} -> true
+        _ -> false
       end
     end
 
@@ -85,8 +88,11 @@ defmodule Ui do
       String.to_integer(string)
     end
 
-    defp is_number?(input) do
-      Integer.parse(input) != :error
+    defp number(input) do
+      case Integer.parse(input) do
+        {number, ""} -> number
+        _ -> :not_a_number
+      end
     end
 
     defp line do
