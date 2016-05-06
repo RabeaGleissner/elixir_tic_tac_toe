@@ -26,7 +26,7 @@ defmodule UiTest do
   test "it prints a board" do
     assert capture_io(fn ->
       Ui.print_board([1,"X",3,4,"O",6,7,8,9])
-    end) == @clear_screen <> "1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
+    end) == @clear_screen <> "\n1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
   end
 
   test "prints game over message for winner X" do

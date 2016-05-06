@@ -27,6 +27,10 @@ defmodule Board do
     |> Enum.empty?
   end
 
+  def rows(board) do
+    Enum.chunk(board, 3)
+  end
+
   defp mark?(mark), do: mark in ["X", "O"]
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
