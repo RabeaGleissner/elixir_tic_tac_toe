@@ -6,7 +6,7 @@ To run this application, first clone the repo by typing:
 
 Then navigate into the directory and type:
 
- `mix TTT.start`
+ `mix play`
 
 To run the tests, type:
 
