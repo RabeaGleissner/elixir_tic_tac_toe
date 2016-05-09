@@ -43,8 +43,6 @@ defmodule Board do
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
 
-  defp mark?(mark), do: mark in ["X", "O"]
-
   def position_available?(board, position) do
     cell = Enum.at(board, position - 1)
     if available?(cell) do
@@ -54,7 +52,7 @@ defmodule Board do
     end
   end
 
-  def available?(cell), do: !(cell in ["X", "O"])
+  def available?(cell), do: !mark?(cell)
 
   def result(board) do
     if draw?(board) do
@@ -84,6 +82,8 @@ defmodule Board do
 
   defp same_marks?(mark, mark, mark), do: true
   defp same_marks?(_,_,_), do: false
+
+  defp mark?(mark), do: mark in ["X", "O"]
 
   defp more_o_marks(board), do: mark_count("X", board) <= mark_count("O", board)
 end
