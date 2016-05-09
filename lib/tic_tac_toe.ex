@@ -10,22 +10,22 @@ defmodule TicTacToe do
     Ui.ask_for_game_mode
     |> PlayerFactory.players
     |> play(board, Board.game_over?(board))
-    run_application(Ui.play_again?)
+    Ui.play_again?
+    |> run_application
   end
 
   def play(_players, board, true), do: game_over(board)
   def play(players, board, false) do
-    Ui.print_board(board)
-    next_board = play_move(players, board)
-    Enum.reverse(players)
-    |> play(next_board, Board.game_over?(next_board))
+    board |> Ui.print_board
+    next_board = play_move(board, players)
+    Enum.reverse(players) |> play(next_board, Board.game_over?(next_board))
   end
 
   defp stop do
     Ui.say_bye
   end
 
-  defp play_move([player | _], board) do
+  defp play_move(board, [player | _]) do
     player.make_move(board)
   end
 
