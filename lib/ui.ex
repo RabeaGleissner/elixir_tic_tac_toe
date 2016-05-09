@@ -8,7 +8,8 @@ defmodule Ui do
   ]
 
     def ask_for_game_mode do
-      IO.puts "Please choose a game mode:"
+      clear_screen
+      IO.puts "Please choose a game mode:\n"
       Enum.map(@game_mode, fn({number, option, _}) -> IO.puts "#{number} - #{option}" end)
       get_game_mode
     end

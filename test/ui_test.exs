@@ -7,7 +7,7 @@ defmodule UiTest do
   test "asks user to enter a game mode" do
     assert capture_io([input: "1\n"], fn ->
       Ui.ask_for_game_mode
-    end) == "Please choose a game mode:\n1 - Human vs Human\n2 - Human vs Random\n3 - Random vs Human\n"
+    end) == "#{@clear_screen}Please choose a game mode:\n\n1 - Human vs Human\n2 - Human vs Random\n3 - Random vs Human\n"
   end
 
   test "returns :human_vs_human for user input 1" do
