@@ -4,29 +4,48 @@ defmodule UiTest do
 
   @clear_screen "\e[H\e[2J"
 
-  test "it asks the user to enter a position" do
+  test "asks user to enter a game mode" do
+    assert capture_io([input: "1\n"], fn ->
+      Ui.ask_for_game_mode
+    end) == "Please choose a game mode:\n1 - Human vs Human\n2 - Human vs Random\n3 - Random vs Human\n"
+  end
+
+  test "returns user input for game mode" do
+    capture_io([input: "1\n"], fn ->
+      assert Ui.ask_for_game_mode == 1
+    end)
+  end
+
+  test "shows an error message when chosen game mode is invalid" do
+    messages = capture_io([input: "hey\n1\n"], fn ->
+      Ui.ask_for_game_mode
+    end)
+    assert String.contains?(messages, "Sorry, 'hey' is not valid.")
+  end
+
+  test "asks the user to enter a position" do
     assert capture_io([input: "4\n"], fn ->
       Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
     end) == "Please choose a position:\n"
   end
 
-  test "it returns the user's choice for a position" do
+  test "returns the user's choice for a position" do
     capture_io([input: "4\n"], fn ->
       assert Ui.get_users_position([1,2,3,4,5,6,7,8,9])
-== 4
+      == 4
     end)
   end
 
-  test "it asks for a position again if user input is invalid" do
+  test "asks for a position again if user input is invalid" do
     assert capture_io([input: "n\n4\n"], fn ->
       Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
     end) == "Please choose a position:\nn is invalid. We need a number!\nPlease choose a position:\n"
   end
 
-  test "it prints a board" do
+  test "prints a board" do
     assert capture_io(fn ->
       Ui.print_board([1,"X",3,4,"O",6,7,8,9])
-    end) == @clear_screen <> "\n1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
+    end) == @clear_screen <> "1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
   end
 
   test "prints game over message for winner X" do

@@ -1,6 +1,38 @@
 defmodule Ui do
 
   @clear_screen "\e[H\e[2J"
+  @game_mode [
+    {1, "Human vs Human"},
+    {2, "Human vs Random"},
+    {3, "Random vs Human"},
+  ]
+
+    def ask_for_game_mode do
+      IO.puts "Please choose a game mode:"
+      Enum.map(@game_mode, fn({number, option}) -> IO.puts "#{number} - #{option}" end)
+      get_game_mode
+    end
+
+    def get_game_mode do
+      input = clean_input(IO.gets(""))
+      case valid_game_mode?(input) do
+        {:valid, game_mode} -> game_mode
+        {:invalid, user_input} -> invalid_game_mode(user_input)
+      end
+    end
+
+    def invalid_game_mode(user_choice) do
+      IO.puts "Sorry, '#{user_choice}' is not valid."
+      ask_for_game_mode
+    end
+
+    def valid_game_mode?(input) do
+      if Enum.any?(@game_mode, fn({number, _}) -> number(input) == number end) do
+        {:valid, number(input)}
+      else
+        {:invalid, input}
+      end
+    end
 
     def ask_for_position(board) do
       IO.puts "Please choose a position:"
@@ -40,7 +72,7 @@ defmodule Ui do
       |> IO.puts
     end
 
-    defp clear_screen, do: IO.puts @clear_screen
+    defp clear_screen, do: IO.write @clear_screen
 
     defp draw_line(line) do
       Enum.join(line, " | ") <> "\n"
@@ -59,7 +91,8 @@ defmodule Ui do
     end
 
     def say_bye do
-      IO.puts @clear_screen <> "Byyyee... See you next time!"
+      clear_screen
+      IO.puts "Byyyee... See you next time!"
     end
 
     defp clean_input(input) do
