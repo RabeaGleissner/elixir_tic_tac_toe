@@ -55,7 +55,7 @@ defmodule Ui do
 
     defp message(:draw), do: IO.puts "It's a draw.\n\n"
     defp message({:winner, winner}) do
-      IO.puts "Winner is #{winner}.\n\n"
+      IO.puts "The winner is #{winner}.\n\n"
     end
 
     def say_bye do

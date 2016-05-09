@@ -35,7 +35,7 @@ defmodule UiTest do
         "X","O","X",
         "O","X","O",
         "O","X","X"])
-    end) == "Game over!\nWinner is X.\n\n\n"
+    end) == "Game over!\nThe winner is X.\n\n\n"
   end
 
   test "prints game over message for winner O" do
@@ -44,7 +44,7 @@ defmodule UiTest do
         "X","O","X",
         "O","O","O",
         "O","X","X"])
-    end) == "Game over!\nWinner is O.\n\n\n"
+    end) == "Game over!\nThe winner is O.\n\n\n"
   end
 
   test "prints game over message for a draw" do
