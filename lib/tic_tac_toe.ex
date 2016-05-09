@@ -6,9 +6,10 @@ defmodule TicTacToe do
 
   def run_application(false), do: stop
   def run_application(true) do
-    game_mode = Ui.ask_for_game_mode
     board = [1,2,3,4,5,6,7,8,9]
-    play(PlayerFactory.players(game_mode), board, Board.game_over?(board))
+    Ui.ask_for_game_mode
+    |> PlayerFactory.players
+    |> play(board, Board.game_over?(board))
     run_application(Ui.play_again?)
   end
 
@@ -16,7 +17,8 @@ defmodule TicTacToe do
   def play(players, board, false) do
     Ui.print_board(board)
     next_board = play_move(players, board)
-    play(Enum.reverse(players), next_board, Board.game_over?(next_board))
+    Enum.reverse(players)
+    |> play(next_board, Board.game_over?(next_board))
   end
 
   defp stop do
