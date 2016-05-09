@@ -48,13 +48,13 @@ defmodule UiTest do
     end)
   end
 
-  test "asks for a position again if user input is invalid" do
+  test "asks for position again if user input is invalid" do
     assert capture_io([input: "n\n4\n"], fn ->
       Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
     end) == "Please choose a position:\nn is invalid. We need a number!\nPlease choose a position:\n"
   end
 
-  test "asks for a position again if chosen position is already taken" do
+  test "asks for position again if chosen position is already taken" do
     assert capture_io([input: "1\n4\n"], fn ->
       Ui.ask_for_position(["X",2,3,4,5,6,7,8,9])
     end) == "Please choose a position:\n1 is already taken!\nPlease choose a position:\n"

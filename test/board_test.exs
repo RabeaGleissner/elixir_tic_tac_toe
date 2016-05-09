@@ -1,7 +1,7 @@
 defmodule BoardTest do
   use ExUnit.Case
 
-  test "places a mark on an empty board 2" do
+  test "places mark on empty board" do
     assert Board.place_mark([1,2,3,4,5,6,7,8,9], 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
   end
 
@@ -9,7 +9,7 @@ defmodule BoardTest do
     assert Board.place_mark(["X",2,3,4,5,6,7,8,9], 1) == {:taken, 1}
   end
 
-  test "returns next player mark" do
+  test "returns next player's mark" do
     assert Board.next_player_mark(["X",2,3,4,5,6,7,8,9]) == "O"
   end
 
