@@ -9,12 +9,21 @@ defmodule Ui do
 
     def get_users_position(board) do
       input = clean_input(IO.gets(""))
-      if valid_position?(input, board) do
-        convert_to_integer(input)
-      else
-        invalid_position_error
-        ask_for_position(board)
+      case valid_position?(input, board) do
+        {:valid, position} -> position
+        {:taken, position} -> move_was_taken(board, position)
+        :not_a_number -> was_not_a_number(board, input)
       end
+    end
+
+    defp move_was_taken(board, position) do
+      IO.puts "#{position} is already taken!"
+      ask_for_position(board)
+    end
+
+    defp was_not_a_number(board, input) do
+      IO.puts "#{input} is invalid. We need a number!"
+      ask_for_position(board)
     end
 
     def play_again? do
@@ -23,20 +32,30 @@ defmodule Ui do
     end
 
     def print_board(board) do
-      IO.puts @clear_screen <> "#{List.first(board)} | #{Enum.at(board, 1)} | #{Enum.at(board, 2)}\n" <>
-      line <>
-      "#{Enum.at(board, 3)} | #{Enum.at(board, 4)} | #{Enum.at(board, 5)}\n" <>
-      line <>
-      "#{Enum.at(board, 6)} | #{Enum.at(board, 7)} | #{List.last(board)}\n"
+      clear_screen
+      board
+      |> Board.rows
+      |> Enum.map(&draw_line/1)
+      |> Enum.join(line)
+      |> IO.puts
+    end
+
+    defp clear_screen, do: IO.puts @clear_screen
+
+    defp draw_line(line) do
+      Enum.join(line, " | ") <> "\n"
     end
 
     def game_over_message(board) do
       IO.puts "Game over!"
-      if Board.draw?(board) do
-        IO.puts "It's a draw.\n\n"
-      else
-        IO.puts "Winner is #{Board.winning_mark(board)}.\n\n"
-      end
+      board
+      |> Board.result
+      |> message
+    end
+
+    defp message(:draw), do: IO.puts "It's a draw.\n\n"
+    defp message({:winner, winner}) do
+      IO.puts "The winner is #{winner}.\n\n"
     end
 
     def say_bye do
@@ -50,40 +69,38 @@ defmodule Ui do
     end
 
     defp get_users_replay_choice do
-      input = clean_input(IO.gets(""))
-      cond do
-        input == "y" ->
-          true
-        input == "n" ->
-          false
-        true ->
-          invalid_replay_choice_error
-          play_again?
-      end
+      IO.gets("")
+      |> clean_input
+      |> replay?
+    end
+
+    defp replay?("y"), do: true
+    defp replay?("n"), do: false
+    defp replay?(_) do
+      invalid_replay_choice_error
+      play_again?
     end
 
     defp invalid_replay_choice_error do
       IO.puts "Please reply with 'y' or 'n'."
     end
 
-    defp invalid_position_error do
-      IO.puts "This position is not available."
-    end
-
     defp valid_position?(input, board) do
-      if is_number?(input) do
-        Board.position_available?(convert_to_integer(input), board)
-      else
-        false
+      input
+      |> number
+      |> available_on_board?(board)
+    end
+
+    defp available_on_board?(:not_a_number, _), do: :not_a_number
+    defp available_on_board?(position, board) do
+      Board.position_available?(board, position)
+    end
+
+    defp number(input) do
+      case Integer.parse(input) do
+        {number, ""} -> number
+        _ -> :not_a_number
       end
-    end
-
-    defp convert_to_integer(string) do
-      String.to_integer(string)
-    end
-
-    defp is_number?(input) do
-      Integer.parse(input) != :error
     end
 
     defp line do

@@ -20,13 +20,13 @@ defmodule UiTest do
   test "it asks for a position again if user input is invalid" do
     assert capture_io([input: "n\n4\n"], fn ->
       Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
-    end) == "Please choose a position:\nThis position is not available.\nPlease choose a position:\n"
+    end) == "Please choose a position:\nn is invalid. We need a number!\nPlease choose a position:\n"
   end
 
   test "it prints a board" do
     assert capture_io(fn ->
       Ui.print_board([1,"X",3,4,"O",6,7,8,9])
-    end) == @clear_screen <> "1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
+    end) == @clear_screen <> "\n1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
   end
 
   test "prints game over message for winner X" do
@@ -35,7 +35,7 @@ defmodule UiTest do
         "X","O","X",
         "O","X","O",
         "O","X","X"])
-    end) == "Game over!\nWinner is X.\n\n\n"
+    end) == "Game over!\nThe winner is X.\n\n\n"
   end
 
   test "prints game over message for winner O" do
@@ -44,7 +44,7 @@ defmodule UiTest do
         "X","O","X",
         "O","O","O",
         "O","X","X"])
-    end) == "Game over!\nWinner is O.\n\n\n"
+    end) == "Game over!\nThe winner is O.\n\n\n"
   end
 
   test "prints game over message for a draw" do
