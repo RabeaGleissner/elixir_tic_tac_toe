@@ -2,14 +2,14 @@ defmodule PlayerFactoryTest do
   use ExUnit.Case
 
   test "returns two human players for human vs human game" do
-    assert PlayerFactory.players(:human_vs_human) == {HumanPlayer, HumanPlayer}
+    assert PlayerFactory.players(:human_vs_human) == [HumanPlayer, HumanPlayer]
   end
 
   test "returns human and random players for human vs random game" do
-    assert PlayerFactory.players(:human_vs_random) == {HumanPlayer, RandomPlayer}
+    assert PlayerFactory.players(:human_vs_random) == [HumanPlayer, RandomPlayer]
   end
 
   test "returns random and human players for random vs human game" do
-    assert PlayerFactory.players(:random_vs_human) == {RandomPlayer, HumanPlayer}
+    assert PlayerFactory.players(:random_vs_human) == [RandomPlayer, HumanPlayer]
   end
 end
