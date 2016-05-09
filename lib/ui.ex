@@ -10,7 +10,9 @@ defmodule Ui do
     def ask_for_game_mode do
       clear_screen
       IO.puts "Please choose a game mode:\n"
-      Enum.map(@game_mode, fn({number, option, _}) -> IO.puts "#{number} - #{option}" end)
+      Enum.map(@game_mode, fn({number, option, _}) ->
+        IO.puts "#{number} - #{option}"
+      end)
       get_game_mode
     end
 
@@ -26,6 +28,7 @@ defmodule Ui do
       |> Enum.map(&draw_line/1)
       |> Enum.join(line)
       |> IO.puts
+      board
     end
 
     def ask_for_position(board) do
