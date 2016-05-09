@@ -43,7 +43,7 @@ defmodule UiTest do
 
   test "returns the user's choice for a position" do
     capture_io([input: "4\n"], fn ->
-      assert Ui.get_users_position([1,2,3,4,5,6,7,8,9])
+      assert Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
       == 4
     end)
   end
