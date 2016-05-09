@@ -1,8 +1,6 @@
 defmodule TicTacToe do
 
-  def start do
-    run_application(true)
-  end
+  def start, do: run_application(true)
 
   defp run_application(false), do: stop
   defp run_application(true) do
@@ -23,13 +21,9 @@ defmodule TicTacToe do
     |> play(next_board, Board.game_over?(next_board))
   end
 
-  defp stop do
-    Ui.say_bye
-  end
+  defp stop, do: Ui.say_bye
 
-  defp play_move(board, [player | _]) do
-    player.make_move(board)
-  end
+  defp play_move(board, [player | _]), do: player.make_move(board)
 
   defp game_over(board) do
     board

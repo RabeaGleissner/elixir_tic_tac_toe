@@ -10,7 +10,7 @@ Now navigate into the directory and install the dependencies:
 
 ## Play the game
 
-Next, type:
+Type:
 
  `mix play`
 

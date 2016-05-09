@@ -4,7 +4,7 @@ defmodule RandomPlayer do
     position = board
                 |> Board.available_positions
                 |> Enum.random
-    {:ok, next_board } = Board.place_mark(board, position)
+    {:ok, next_board} = Board.place_mark(board, position)
     next_board
   end
 end

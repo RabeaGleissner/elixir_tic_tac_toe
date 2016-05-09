@@ -37,13 +37,9 @@ defmodule Board do
     |> Enum.empty?
   end
 
-  def rows(board) do
-    Enum.chunk(board, 3)
-  end
+  def rows(board), do: Enum.chunk(board, 3)
 
-  def available_positions(board) do
-    Enum.filter(board, &available?/1)
-  end
+  def available_positions(board), do: Enum.filter(board, &available?/1)
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
 
@@ -58,9 +54,7 @@ defmodule Board do
     end
   end
 
-  def available?(cell) do
-    !(cell in ["X", "O"])
-  end
+  def available?(cell), do: !(cell in ["X", "O"])
 
   def result(board) do
     if draw?(board) do
