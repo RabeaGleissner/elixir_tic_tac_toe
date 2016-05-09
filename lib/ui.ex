@@ -16,7 +16,7 @@ defmodule Ui do
     def get_game_mode do
       input = clean_input(IO.gets(""))
       case valid_game_mode?(input) do
-        {:valid, game_mode} -> game_mode
+        {:valid, game_mode} -> map_game_mode(game_mode)
         {:invalid, user_input} -> invalid_game_mode(user_input)
       end
     end
@@ -31,6 +31,14 @@ defmodule Ui do
         {:valid, number(input)}
       else
         {:invalid, input}
+      end
+    end
+
+    def map_game_mode(number) do
+      case number do
+        1 -> :human_vs_human
+        2 -> :human_vs_random
+        3 -> :random_vs_human
       end
     end
 

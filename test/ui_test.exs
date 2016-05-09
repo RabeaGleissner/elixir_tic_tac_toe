@@ -10,9 +10,21 @@ defmodule UiTest do
     end) == "Please choose a game mode:\n1 - Human vs Human\n2 - Human vs Random\n3 - Random vs Human\n"
   end
 
-  test "returns user input for game mode" do
+  test "returns :human_vs_human for user input 1" do
     capture_io([input: "1\n"], fn ->
-      assert Ui.ask_for_game_mode == 1
+      assert Ui.ask_for_game_mode == :human_vs_human
+    end)
+  end
+
+  test "returns :human_vs_random for user input 2" do
+    capture_io([input: "2\n"], fn ->
+      assert Ui.ask_for_game_mode == :human_vs_random
+    end)
+  end
+
+  test "returns :random_vs_human for user input 3" do
+    capture_io([input: "3\n"], fn ->
+      assert Ui.ask_for_game_mode == :random_vs_human
     end)
   end
 
