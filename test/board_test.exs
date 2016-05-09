@@ -80,4 +80,12 @@ defmodule BoardTest do
       "X", "X","O"
     ], 2) == {:valid, 2}
   end
+
+  test "returns all available positions" do
+    assert Board.available_positions([
+      "O",  2,  3,
+      "X", "O", 6,
+      "X", "X","O"
+    ]) == [2,3,6]
+  end
 end

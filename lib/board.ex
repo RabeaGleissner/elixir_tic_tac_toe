@@ -41,17 +41,25 @@ defmodule Board do
     Enum.chunk(board, 3)
   end
 
-  defp mark?(mark), do: mark in ["X", "O"]
+  def available_positions(board) do
+    Enum.filter(board, &available?/1)
+  end
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
 
+  defp mark?(mark), do: mark in ["X", "O"]
+
   def position_available?(board, position) do
     cell = Enum.at(board, position - 1)
-    if cell in ["X", "O"] do
-      {:taken, position}
-    else
+    if available?(cell) do
       {:valid, position}
+    else
+      {:taken, position}
     end
+  end
+
+  def available?(cell) do
+    !(cell in ["X", "O"])
   end
 
   def result(board) do
