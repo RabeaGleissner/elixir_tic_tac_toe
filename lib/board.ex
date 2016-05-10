@@ -15,8 +15,8 @@ defmodule Board do
 
   defp update_board({:valid, position}, board) do
     next_board = board
-               |> next_player_mark
-               |> update(board, position-1)
+                  |> next_player_mark
+                  |> update(board, position-1)
     {:ok, next_board}
   end
 
@@ -48,6 +48,18 @@ defmodule Board do
     board
     |> rows
     |> transpose
+  end
+
+  def diagonals(board), do: diagonals(board, dimension(board))
+
+  defp diagonals(board, dimension) do
+    if dimension == 3 do
+      [[Enum.at(board, 0), Enum.at(board, 4), Enum.at(board, 8)],
+       [Enum.at(board, 2), Enum.at(board, 4), Enum.at(board, 6)]]
+    else
+      [[Enum.at(board, 0), Enum.at(board, 5), Enum.at(board, 10), Enum.at(board, 15)],
+       [Enum.at(board, 3), Enum.at(board, 6), Enum.at(board, 9), Enum.at(board, 12)]]
+    end
   end
 
   defp transpose([[]|_]), do: []

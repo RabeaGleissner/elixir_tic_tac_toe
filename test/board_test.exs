@@ -40,6 +40,14 @@ defmodule BoardTest do
     assert Board.columns(@empty_4_by_4_board) == [[1, 5, 9, 13], [2, 6, 10, 14], [3, 7, 11, 15], [4, 8, 12, 16]]
   end
 
+  test "returns all diagonals of a 3x3 board" do
+    assert Board.diagonals(@empty_3_by_3_board) == [[1, 5, 9], [3, 5, 7]]
+  end
+
+  test "returns all diagonals of a 4x4 board" do
+    assert Board.diagonals(@empty_4_by_4_board) == [[1, 6, 11, 16], [4, 7, 10, 13]]
+  end
+
   test "knows that it is a winning board" do
     assert Board.winner?([
       "X", "X", "X",
