@@ -7,6 +7,7 @@ defmodule TicTacToe do
     Ui.ask_for_game_mode
     |> PlayerFactory.players
     |> play(Board.empty_board, Board.game_over?(Board.empty_board))
+
     Ui.play_again?
     |> run_application
   end
@@ -16,6 +17,7 @@ defmodule TicTacToe do
     next_board = board
     |> Ui.print_board
     |> play_move(players)
+
     Enum.reverse(players)
     |> play(next_board, Board.game_over?(next_board))
   end
