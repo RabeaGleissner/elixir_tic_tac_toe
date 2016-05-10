@@ -10,10 +10,14 @@ defmodule Ui do
   def ask_for_game_mode do
     clear_screen
     IO.puts "Please choose a game mode:\n"
-    Enum.map(@game_mode, fn({number, option, _}) ->
-      IO.puts "#{number} - #{option}"
-    end)
+    print_game_modes(@game_mode, "")
     get_game_mode
+  end
+
+  defp print_game_modes([], print_options), do: IO.write print_options
+  defp print_game_modes([{number, option, _} | rest], print_options) do
+       updated = print_options <> "#{number} - #{option}\n"
+      print_game_modes(rest, updated)
   end
 
   def play_again? do
