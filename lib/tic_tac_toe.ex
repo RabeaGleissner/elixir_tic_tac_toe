@@ -6,12 +6,13 @@ defmodule TicTacToe do
   defp run_application(true) do
     Ui.ask_for_game_mode
     |> PlayerFactory.players
-    |> play(Board.empty_board, Board.game_over?(Board.empty_board))
+    |> play(Board.empty_board)
 
     Ui.play_again?
     |> run_application
   end
 
+  defp play(players, board), do: play(players, board, Board.game_over?(board))
   defp play(_players, board, true), do: game_over(board)
   defp play(players, board, false) do
     next_board = board
