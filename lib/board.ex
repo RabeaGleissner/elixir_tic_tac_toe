@@ -2,6 +2,10 @@ defmodule Board do
 
   @winning_combinations [{0,1,2}, {3,4,5}, {6,7,8}, {0,3,6}, {1,4,7}, {2,5,8}, {0,4,8}, {2,4,6}]
 
+  def empty_board do
+     [1,2,3,4,5,6,7,8,9]
+  end
+
   def place_mark(board, position) do
     board
     |> position_available?(position)
@@ -37,22 +41,22 @@ defmodule Board do
     |> Enum.empty?
   end
 
-  def rows(board) do
-    Enum.chunk(board, 3)
-  end
+  def rows(board), do: Enum.chunk(board, 3)
 
-  defp mark?(mark), do: mark in ["X", "O"]
+  def available_positions(board), do: Enum.filter(board, &available?/1)
 
   def winning_mark(board), do: winning_mark(board, @winning_combinations)
 
   def position_available?(board, position) do
     cell = Enum.at(board, position - 1)
-    if cell in ["X", "O"] do
-      {:taken, position}
-    else
+    if available?(cell) do
       {:valid, position}
+    else
+      {:taken, position}
     end
   end
+
+  def available?(cell), do: !mark?(cell)
 
   def result(board) do
     if draw?(board) do
@@ -82,6 +86,8 @@ defmodule Board do
 
   defp same_marks?(mark, mark, mark), do: true
   defp same_marks?(_,_,_), do: false
+
+  defp mark?(mark), do: mark in ["X", "O"]
 
   defp more_o_marks(board), do: mark_count("X", board) <= mark_count("O", board)
 end

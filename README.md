@@ -4,13 +4,27 @@ To run this application, first clone the repo by typing:
 
 `git clone git@github.com:RabeaGleissner/elixir_tic_tac_toe.git`
 
-Then navigate into the directory and type:
+Now navigate into the directory and install the dependencies:
 
- `mix TTT.start`
+`mix deps.get`
+
+## Play the game
+
+Type:
+
+ `mix play`
+
+## Tests
 
 To run the tests, type:
 
 `mix test`
+
+If you are interested in the code coverage, run:
+
+`mix coveralls.html`
+
+`open cover/excoveralls.html`
 
 ## Installation
 
