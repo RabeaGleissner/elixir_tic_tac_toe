@@ -37,20 +37,20 @@ defmodule UiTest do
 
   test "asks the user to enter a position" do
     assert capture_io([input: "4\n"], fn ->
-      Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
+      Ui.ask_for_position(Board.empty_board)
     end) == "Please choose a position:\n"
   end
 
   test "returns the user's choice for a position" do
     capture_io([input: "4\n"], fn ->
-      assert Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
+      assert Ui.ask_for_position(Board.empty_board)
       == 4
     end)
   end
 
   test "asks for position again if user input is invalid" do
     assert capture_io([input: "n\n4\n"], fn ->
-      Ui.ask_for_position([1,2,3,4,5,6,7,8,9])
+      Ui.ask_for_position(Board.empty_board)
     end) == "Please choose a position:\nn is invalid. We need a number!\nPlease choose a position:\n"
   end
 
@@ -101,13 +101,13 @@ defmodule UiTest do
 
   test "returns true when user wants to play again" do
     capture_io([input: "y"], fn ->
-      assert Ui.play_again? == true
+      assert Ui.play_again?
     end)
   end
 
   test "returns false when user does not want to play again" do
     capture_io([input: "n"], fn ->
-      assert Ui.play_again? == false
+      refute Ui.play_again?
     end)
   end
 

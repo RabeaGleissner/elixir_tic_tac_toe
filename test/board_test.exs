@@ -1,13 +1,14 @@
 defmodule BoardTest do
   use ExUnit.Case
 
+  @empty_board Board.empty_board
+
   test "returns an empty board" do
-    board = Board.empty_board
-    assert !Board.board_full?(board)
+    refute Board.board_full?(@empty_board)
   end
 
   test "places mark on empty board" do
-    assert Board.place_mark([1,2,3,4,5,6,7,8,9], 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
+    assert Board.place_mark(@empty_board, 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
   end
 
   test "cannot place mark in a position that is taken" do
@@ -23,15 +24,15 @@ defmodule BoardTest do
       "X", "X", "X",
       "O", "O", 6,
        7,   8,  9
-    ]) == true
+    ])
   end
 
   test "knows that there is no winner" do
-    assert Board.winner?([
+    refute Board.winner?([
       "X", "X", "O",
       "O", "O", 6,
        7,   8, "X"
-    ]) == false
+    ])
   end
 
   test "returns winning mark X" do
@@ -55,7 +56,7 @@ defmodule BoardTest do
       "O", "X", "O",
       "O", "X", "X",
       "X", "O", "O"
-    ]) == true
+    ])
   end
 
    test "knows that game is over" do
@@ -63,11 +64,11 @@ defmodule BoardTest do
       "O", "X", "O",
       "O", "X", "X",
       "X", "O", "O"
-    ]) == true
+    ])
    end
 
    test "board is empty" do
-     assert Board.board_full?([1,2,3,4,5,6,7,8,9]) == false
+     refute Board.board_full?([1,2,3,4,5,6,7,8,9])
    end
 
   test "knows that the position is unavailable" do
