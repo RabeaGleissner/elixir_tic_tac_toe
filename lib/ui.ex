@@ -16,8 +16,8 @@ defmodule Ui do
 
   defp print_game_modes([], print_options), do: IO.write print_options
   defp print_game_modes([{number, option, _} | rest], print_options) do
-       updated = print_options <> "#{number} - #{option}\n"
-      print_game_modes(rest, updated)
+    updated = print_options <> "#{number} - #{option}\n"
+    print_game_modes(rest, updated)
   end
 
   def play_again? do
