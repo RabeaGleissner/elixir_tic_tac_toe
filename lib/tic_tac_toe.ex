@@ -4,10 +4,9 @@ defmodule TicTacToe do
 
   defp run_application(false), do: stop
   defp run_application(true) do
-    empty_board = [1,2,3,4,5,6,7,8,9]
     Ui.ask_for_game_mode
     |> PlayerFactory.players
-    |> play(empty_board, Board.game_over?(empty_board))
+    |> play(Board.empty_board, Board.game_over?(Board.empty_board))
     Ui.play_again?
     |> run_application
   end

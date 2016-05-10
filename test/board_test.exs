@@ -1,6 +1,11 @@
 defmodule BoardTest do
   use ExUnit.Case
 
+  test "returns an empty board" do
+    board = Board.empty_board
+    assert !Board.board_full?(board)
+  end
+
   test "places mark on empty board" do
     assert Board.place_mark([1,2,3,4,5,6,7,8,9], 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
   end

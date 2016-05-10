@@ -2,6 +2,10 @@ defmodule Board do
 
   @winning_combinations [{0,1,2}, {3,4,5}, {6,7,8}, {0,3,6}, {1,4,7}, {2,5,8}, {0,4,8}, {2,4,6}]
 
+  def empty_board do
+     [1,2,3,4,5,6,7,8,9]
+  end
+
   def place_mark(board, position) do
     board
     |> position_available?(position)
