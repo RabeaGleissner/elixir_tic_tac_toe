@@ -42,7 +42,24 @@ defmodule Board do
     |> Enum.empty?
   end
 
-  def rows(board), do: Enum.chunk(board, 3)
+  def rows(board), do: Enum.chunk(board, dimension(board))
+
+  def columns(board) do
+    board
+    |> rows
+    |> transpose
+  end
+
+  defp transpose([[]|_]), do: []
+  defp transpose(rows) do
+    [Enum.map(rows, &hd/1) | transpose(Enum.map(rows, &tl/1))]
+  end
+
+  defp dimension(board) do
+    length(board)
+    |> :math.sqrt
+    |> round
+  end
 
   def available_positions(board), do: Enum.filter(board, &available?/1)
 

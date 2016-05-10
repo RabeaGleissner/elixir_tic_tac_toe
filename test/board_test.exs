@@ -32,6 +32,14 @@ defmodule BoardTest do
     assert Board.next_player_mark(["X",2,3,4,5,6,7,8,9]) == "O"
   end
 
+  test "returns all columns of the 3x3 board" do
+    assert Board.columns(@empty_3_by_3_board) == [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+  end
+
+  test "returns all columns of the 4x4 board" do
+    assert Board.columns(@empty_4_by_4_board) == [[1, 5, 9, 13], [2, 6, 10, 14], [3, 7, 11, 15], [4, 8, 12, 16]]
+  end
+
   test "knows that it is a winning board" do
     assert Board.winner?([
       "X", "X", "X",
