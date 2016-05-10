@@ -1,5 +1,7 @@
 # TicTacToe
 
+[![Build Status](https://travis-ci.org/RabeaGleissner/elixir_tic_tac_toe.svg?branch=master)](https://travis-ci.org/RabeaGleissner/elixir_tic_tac_toe)
+
 To run this application, first clone the repo by typing:
 
 `git clone git@github.com:RabeaGleissner/elixir_tic_tac_toe.git`
