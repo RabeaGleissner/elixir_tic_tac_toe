@@ -1,14 +1,27 @@
 defmodule BoardTest do
   use ExUnit.Case
 
-  @empty_board Board.empty_board
+  @empty_3_by_3_board Board.empty_board
+  @empty_4_by_4_board Board.empty_board(4)
 
-  test "returns an empty board" do
-    refute Board.board_full?(@empty_board)
+  test "returns an empty 3x3 board" do
+    refute Board.board_full?(@empty_3_by_3_board)
+  end
+
+  test "3x3 board has 9 cells" do
+    assert length(@empty_3_by_3_board) == 9
+  end
+
+  test "returns an empty 4x4 board" do
+    refute Board.board_full?(@empty_4_by_4_board)
+  end
+
+  test "4x4 board has 16 cells" do
+    assert length(@empty_4_by_4_board) == 16
   end
 
   test "places mark on empty board" do
-    assert Board.place_mark(@empty_board, 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
+    assert Board.place_mark(@empty_3_by_3_board, 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
   end
 
   test "cannot place mark in a position that is taken" do
