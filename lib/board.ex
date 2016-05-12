@@ -83,7 +83,7 @@ defmodule Board do
   defp update_board({:valid, position}, board) do
     next_board = board
                   |> next_player_mark
-                  |> update(board, position-1)
+                  |> update(board, position - 1)
     {:ok, next_board}
   end
 
@@ -120,7 +120,7 @@ defmodule Board do
     [Enum.map(rows, &hd/1) | transpose(Enum.map(rows, &tl/1))]
   end
 
-  defp dimension(board) do
+  def dimension(board) do
     length(board)
     |> :math.sqrt
     |> round

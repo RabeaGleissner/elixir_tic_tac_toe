@@ -56,7 +56,7 @@ defmodule UiTest do
   test "asks the user to enter a position" do
     assert capture_io([input: "4\n"], fn ->
       Ui.ask_for_position(Board.empty_board)
-    end) == "Please choose a position:\n"
+    end) == "\nPlease choose a position:\n"
   end
 
   test "returns the user's choice for a position" do
@@ -69,19 +69,25 @@ defmodule UiTest do
   test "asks for position again if user input is invalid" do
     assert capture_io([input: "n\n4\n"], fn ->
       Ui.ask_for_position(Board.empty_board)
-    end) == "Please choose a position:\nn is invalid. We need a number!\nPlease choose a position:\n"
+    end) == "\nPlease choose a position:\nn is invalid. We need a number!\n\nPlease choose a position:\n"
   end
 
   test "asks for position again if chosen position is already taken" do
     assert capture_io([input: "1\n4\n"], fn ->
       Ui.ask_for_position(["X",2,3,4,5,6,7,8,9])
-    end) == "Please choose a position:\n1 is already taken!\nPlease choose a position:\n"
+    end) == "\nPlease choose a position:\n1 is already taken!\n\nPlease choose a position:\n"
   end
 
-  test "prints a board" do
+  test "prints a 3x3 board" do
     assert capture_io(fn ->
       Ui.print_board([1,"X",3,4,"O",6,7,8,9])
-    end) == @clear_screen <> "1 | X | 3\n---------\n4 | O | 6\n---------\n7 | 8 | 9\n\n"
+    end) == @clear_screen <> " 1 |  X |  3\n-------------\n 4 |  O |  6\n-------------\n 7 |  8 |  9\n"
+  end
+
+  test "prints a 4x4 board" do
+    assert capture_io(fn ->
+      Ui.print_board([1,"X",3,4,"O",6,7,8,9,10,11,12,13,"X",15,16])
+    end) == @clear_screen <> " 1 |  X |  3 |  4\n------------------\n O |  6 |  7 |  8\n------------------\n 9 | 10 | 11 | 12\n------------------\n13 |  X | 15 | 16\n"
   end
 
   test "prints game over message for winner X" do

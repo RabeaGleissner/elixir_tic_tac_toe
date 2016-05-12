@@ -61,13 +61,13 @@ defmodule Ui do
     board
     |> Board.rows
     |> Enum.map(&draw_line/1)
-    |> Enum.join(line)
+    |> Enum.join(line(Board.dimension(board)))
     |> IO.puts
       board
   end
 
   def ask_for_position(board) do
-    IO.puts "Please choose a position:"
+    IO.puts "\nPlease choose a position:"
     get_users_position(board)
   end
 
@@ -133,8 +133,21 @@ defmodule Ui do
   def clear_screen, do: IO.write @clear_screen
 
   defp draw_line(line) do
-    Enum.join(line, " | ") <> "\n"
+    Enum.map(line, fn(cell) -> evenly_spaced_cell(cell) end)
+    |> Enum.join(" | ")
   end
+
+  defp evenly_spaced_cell(cell) do
+    cell
+    |> ensure_is_string
+    |> String.rjust(2)
+  end
+
+  defp ensure_is_string(input) when is_integer(input) do
+    Integer.to_string(input)
+  end
+
+  defp ensure_is_string(input), do: input
 
   defp message(:draw), do: IO.puts "It's a draw.\n\n"
   defp message({:winner, winner}) do
@@ -182,7 +195,6 @@ defmodule Ui do
     end
   end
 
-  defp line do
-    "---------\n"
-  end
+  defp line(3), do: "\n-------------\n"
+  defp line(4), do: "\n------------------\n"
 end
