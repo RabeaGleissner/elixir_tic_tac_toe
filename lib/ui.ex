@@ -19,30 +19,6 @@ defmodule Ui do
     get_board_size
   end
 
-  defp get_board_size do
-    input = clean_input(IO.gets(""))
-    if map_board_size_choice(input) == :invalid do
-      invalid_board_size(input)
-    else
-      map_board_size_choice(input)
-    end
-  end
-
-  defp map_board_size_choice("1"), do: 3
-  defp map_board_size_choice("2"), do: 4
-  defp map_board_size_choice(_), do: :invalid
-
-  defp invalid_board_size(input) do
-    IO.puts "Sorry, #{input} doesn't quite work. Please enter 1 or 2!"
-    ask_for_board_size
-  end
-
-  defp print_game_modes([], printable), do: IO.write printable
-  defp print_game_modes([{number, option, _} | rest], printable) do
-    updated_printable = printable <> "#{number} - #{option}\n"
-    print_game_modes(rest, updated_printable)
-  end
-
   def play_again? do
     IO.puts "Play again? (y/n)"
     get_users_replay_choice
@@ -103,6 +79,26 @@ defmodule Ui do
     |> List.first
     |> Tuple.to_list
     |> List.last
+  end
+
+  defp get_board_size do
+    input = clean_input(IO.gets(""))
+    map_board_size_choice(input)
+  end
+
+  defp map_board_size_choice("1"), do: 3
+  defp map_board_size_choice("2"), do: 4
+  defp map_board_size_choice(input), do: invalid_board_size(input)
+
+  defp invalid_board_size(input) do
+    IO.puts "Sorry, #{input} doesn't quite work. Please enter 1 or 2!"
+    ask_for_board_size
+  end
+
+  defp print_game_modes([], printable), do: IO.write printable
+  defp print_game_modes([{number, option, _} | rest], printable) do
+    updated_printable = printable <> "#{number} - #{option}\n"
+    print_game_modes(rest, updated_printable)
   end
 
   defp get_users_position(board) do
