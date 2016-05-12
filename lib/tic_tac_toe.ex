@@ -4,9 +4,11 @@ defmodule TicTacToe do
 
   defp run_application(false), do: stop
   defp run_application(true) do
+    Ui.clear_screen
+    size = Ui.ask_for_board_size
     Ui.ask_for_game_mode
     |> PlayerFactory.players
-    |> play(Board.empty_board)
+    |> play(Board.empty_board(size))
 
     Ui.play_again?
     |> run_application

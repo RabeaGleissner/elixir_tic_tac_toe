@@ -15,7 +15,6 @@ defmodule Ui do
   end
 
   def ask_for_board_size do
-    clear_screen
     IO.puts "Please choose a board size:\n\n1 - 3x3 board\n2 - 4x4 board"
     get_board_size
   end
@@ -23,10 +22,17 @@ defmodule Ui do
   defp get_board_size do
     input = clean_input(IO.gets(""))
     if valid_board_size?(input) do
-      {number, _} = Integer.parse(input)
-      number
+      map_board_size_choice(input)
     else
       invalid_board_size(input)
+    end
+  end
+
+  defp map_board_size_choice(choice) do
+    if (choice == "1") do
+      3
+    else
+      4
     end
   end
 
@@ -124,7 +130,7 @@ defmodule Ui do
     ask_for_position(board)
   end
 
-  defp clear_screen, do: IO.write @clear_screen
+  def clear_screen, do: IO.write @clear_screen
 
   defp draw_line(line) do
     Enum.join(line, " | ") <> "\n"
