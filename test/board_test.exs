@@ -5,7 +5,7 @@ defmodule BoardTest do
   @empty_4_by_4_board Board.empty_board(4)
 
   test "returns an empty 3x3 board" do
-    refute Board.board_full?(@empty_3_by_3_board)
+    refute Board.board_full?(Board.empty_board)
   end
 
   test "3x3 board has 9 cells" do
@@ -13,7 +13,7 @@ defmodule BoardTest do
   end
 
   test "returns an empty 4x4 board" do
-    refute Board.board_full?(@empty_4_by_4_board)
+    refute Board.board_full?(Board.empty_board(4))
   end
 
   test "4x4 board has 16 cells" do
@@ -30,22 +30,6 @@ defmodule BoardTest do
 
   test "returns next player's mark" do
     assert Board.next_player_mark(["X",2,3,4,5,6,7,8,9]) == "O"
-  end
-
-  test "returns all columns of the 3x3 board" do
-    assert Board.columns(@empty_3_by_3_board) == [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
-  end
-
-  test "returns all columns of the 4x4 board" do
-    assert Board.columns(@empty_4_by_4_board) == [[1, 5, 9, 13], [2, 6, 10, 14], [3, 7, 11, 15], [4, 8, 12, 16]]
-  end
-
-  test "returns all diagonals of a 3x3 board" do
-    assert Board.diagonals(@empty_3_by_3_board) == [[1, 5, 9], [3, 5, 7]]
-  end
-
-  test "returns all diagonals of a 4x4 board" do
-    assert Board.diagonals(@empty_4_by_4_board) == [[1, 6, 11, 16], [4, 7, 10, 13]]
   end
 
   test "returns all lines of the current game state" do
@@ -111,10 +95,6 @@ defmodule BoardTest do
       "O", "X", "X",
       "X", "O", "O"
     ])
-   end
-
-   test "board is empty" do
-     refute Board.board_full?([1,2,3,4,5,6,7,8,9])
    end
 
   test "knows that the position is unavailable" do

@@ -26,37 +26,6 @@ defmodule Board do
 
   def draw?(board), do: board_full?(board) && !winner?(board)
 
-  def board_full?(board) do
-    board
-    |> Enum.reject(&mark?/1)
-    |> Enum.empty?
-  end
-
-  def current_lines(board) do
-    [rows(board), columns(board), diagonals(board)]
-    |> List.flatten
-    |> Enum.chunk(dimension(board))
-  end
-
-  def rows(board), do: Enum.chunk(board, dimension(board))
-
-  def columns(board) do
-    board
-    |> rows
-    |> transpose
-  end
-
-  def diagonals(board), do: diagonals(board, dimension(board))
-  defp diagonals(board, dimension) do
-    if dimension == 3 do
-      [[Enum.at(board, 0), Enum.at(board, 4), Enum.at(board, 8)],
-       [Enum.at(board, 2), Enum.at(board, 4), Enum.at(board, 6)]]
-    else
-      [[Enum.at(board, 0), Enum.at(board, 5), Enum.at(board, 10), Enum.at(board, 15)],
-       [Enum.at(board, 3), Enum.at(board, 6), Enum.at(board, 9), Enum.at(board, 12)]]
-    end
-  end
-
   def available_positions(board), do: Enum.filter(board, &available?/1)
 
   def winning_mark(board), do: winning_mark(board, current_lines(board))
@@ -70,13 +39,48 @@ defmodule Board do
     end
   end
 
-  def available?(cell), do: !mark?(cell)
-
   def result(board) do
     if draw?(board) do
       :draw
     else
       {:winner, winning_mark(board)}
+    end
+  end
+
+  def board_full?(board) do
+    board
+    |> Enum.reject(&mark?/1)
+    |> Enum.empty?
+  end
+
+  def dimension(board) do
+    length(board)
+    |> :math.sqrt
+    |> round
+  end
+
+  def current_lines(board) do
+    [rows(board), columns(board), diagonals(board)]
+    |> List.flatten
+    |> Enum.chunk(dimension(board))
+  end
+
+  def rows(board), do: Enum.chunk(board, dimension(board))
+
+  defp columns(board) do
+    board
+    |> rows
+    |> transpose
+  end
+
+  defp diagonals(board), do: diagonals(board, dimension(board))
+  defp diagonals(board, dimension) do
+    if dimension == 3 do
+      [[Enum.at(board, 0), Enum.at(board, 4), Enum.at(board, 8)],
+       [Enum.at(board, 2), Enum.at(board, 4), Enum.at(board, 6)]]
+    else
+      [[Enum.at(board, 0), Enum.at(board, 5), Enum.at(board, 10), Enum.at(board, 15)],
+       [Enum.at(board, 3), Enum.at(board, 6), Enum.at(board, 9), Enum.at(board, 12)]]
     end
   end
 
@@ -111,6 +115,8 @@ defmodule Board do
     !Enum.any?(result, fn(x) -> x == false end)
   end
 
+  defp available?(cell), do: !mark?(cell)
+
   defp mark?(mark), do: mark in ["X", "O"]
 
   defp more_o_marks(board), do: mark_count("X", board) <= mark_count("O", board)
@@ -118,11 +124,5 @@ defmodule Board do
   defp transpose([[]|_]), do: []
   defp transpose(rows) do
     [Enum.map(rows, &hd/1) | transpose(Enum.map(rows, &tl/1))]
-  end
-
-  def dimension(board) do
-    length(board)
-    |> :math.sqrt
-    |> round
   end
 end

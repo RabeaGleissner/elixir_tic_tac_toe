@@ -21,34 +21,26 @@ defmodule Ui do
 
   defp get_board_size do
     input = clean_input(IO.gets(""))
-    if valid_board_size?(input) do
-      map_board_size_choice(input)
-    else
+    if map_board_size_choice(input) == :invalid do
       invalid_board_size(input)
-    end
-  end
-
-  defp map_board_size_choice(choice) do
-    if (choice == "1") do
-      3
     else
-      4
+      map_board_size_choice(input)
     end
   end
 
-  defp valid_board_size?(user_input) do
-    user_input == "1" || user_input == "2"
-  end
+  defp map_board_size_choice("1"), do: 3
+  defp map_board_size_choice("2"), do: 4
+  defp map_board_size_choice(_), do: :invalid
 
   defp invalid_board_size(input) do
     IO.puts "Sorry, #{input} doesn't quite work. Please enter 1 or 2!"
     ask_for_board_size
   end
 
-  defp print_game_modes([], print_options), do: IO.write print_options
-  defp print_game_modes([{number, option, _} | rest], print_options) do
-    updated = print_options <> "#{number} - #{option}\n"
-    print_game_modes(rest, updated)
+  defp print_game_modes([], printable), do: IO.write printable
+  defp print_game_modes([{number, option, _} | rest], printable) do
+    updated_printable = printable <> "#{number} - #{option}\n"
+    print_game_modes(rest, updated_printable)
   end
 
   def play_again? do
@@ -77,6 +69,8 @@ defmodule Ui do
     |> Board.result
     |> message
   end
+
+  def clear_screen, do: IO.write @clear_screen
 
   def say_bye do
     clear_screen
@@ -130,8 +124,6 @@ defmodule Ui do
     ask_for_position(board)
   end
 
-  def clear_screen, do: IO.write @clear_screen
-
   defp draw_line(line) do
     Enum.map(line, fn(cell) -> evenly_spaced_cell(cell) end)
     |> Enum.join(" | ")
@@ -143,10 +135,7 @@ defmodule Ui do
     |> String.rjust(2)
   end
 
-  defp ensure_is_string(input) when is_integer(input) do
-    Integer.to_string(input)
-  end
-
+  defp ensure_is_string(input) when is_integer(input), do: Integer.to_string(input)
   defp ensure_is_string(input), do: input
 
   defp message(:draw), do: IO.puts "It's a draw.\n\n"
