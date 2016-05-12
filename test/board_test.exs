@@ -48,11 +48,28 @@ defmodule BoardTest do
     assert Board.diagonals(@empty_4_by_4_board) == [[1, 6, 11, 16], [4, 7, 10, 13]]
   end
 
-  test "knows that it is a winning board" do
+  test "returns all lines of the current game state" do
+    assert Board.current_lines([
+      "X", "X", "X",
+      "O", "O", 6,
+       7,   8, 9
+    ]) == [["X", "X", "X"], ["O", "O", 6], [7,8,9], ["X", "O", 7], ["X", "O", 8], ["X", 6, 9], ["X", "O", 9], ["X", "O", 7]]
+  end
+
+  test "knows that it is a winning 3x3 board" do
     assert Board.winner?([
       "X", "X", "X",
       "O", "O", 6,
        7,   8,  9
+    ])
+  end
+
+  test "knows that it is a winning 4x4 board" do
+    assert Board.winner?([
+      "X","O","O","O",
+       5, "X", 7,  8,
+       7,  8, "X",10,
+       11, 12, 13,"X"
     ])
   end
 
