@@ -14,6 +14,31 @@ defmodule Ui do
     get_game_mode
   end
 
+  def ask_for_board_size do
+    clear_screen
+    IO.puts "Please choose a board size:\n\n1 - 3x3 board\n2 - 4x4 board"
+    get_board_size
+  end
+
+  defp get_board_size do
+    input = clean_input(IO.gets(""))
+    if valid_board_size?(input) do
+      {number, _} = Integer.parse(input)
+      number
+    else
+      invalid_board_size(input)
+    end
+  end
+
+  defp valid_board_size?(user_input) do
+    user_input == "1" || user_input == "2"
+  end
+
+  defp invalid_board_size(input) do
+    IO.puts "Sorry, #{input} doesn't quite work. Please enter 1 or 2!"
+    ask_for_board_size
+  end
+
   defp print_game_modes([], print_options), do: IO.write print_options
   defp print_game_modes([{number, option, _} | rest], print_options) do
     updated = print_options <> "#{number} - #{option}\n"

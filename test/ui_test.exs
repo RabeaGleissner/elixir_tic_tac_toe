@@ -4,6 +4,24 @@ defmodule UiTest do
 
   @clear_screen "\e[H\e[2J"
 
+  test "asks user to enter board size" do
+    assert capture_io([input: "1\n"], fn ->
+      Ui.ask_for_board_size
+    end) == "#{@clear_screen}Please choose a board size:\n\n1 - 3x3 board\n2 - 4x4 board\n"
+  end
+
+  test "returns board size chosen by user" do
+    assert capture_io([input: "1\n"], fn ->
+      assert Ui.ask_for_board_size == 1
+    end)
+  end
+
+  test "shows error and asks again if invalid board size was chosen" do
+    assert capture_io([input: "8\n2\n"], fn ->
+      Ui.ask_for_board_size
+    end) == "#{@clear_screen}Please choose a board size:\n\n1 - 3x3 board\n2 - 4x4 board\nSorry, 8 doesn't quite work. Please enter 1 or 2!\n\e[H\e[2JPlease choose a board size:\n\n1 - 3x3 board\n2 - 4x4 board\n"
+  end
+
   test "asks user to enter a game mode" do
     assert capture_io([input: "1\n"], fn ->
       Ui.ask_for_game_mode
