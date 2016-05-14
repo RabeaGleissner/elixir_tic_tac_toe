@@ -114,7 +114,7 @@ defmodule Board do
     List.replace_at(board, position , mark)
   end
 
-  defp winning_mark(_, []), do: nil
+  defp winning_mark(_, []), do: :no_winner
   defp winning_mark(board, [line | rest]) do
     if winning_line(line) do
       List.first(line)
