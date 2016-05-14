@@ -82,13 +82,14 @@ defmodule Ui do
   end
 
   defp get_board_size do
-    input = clean_input(IO.gets(""))
-    map_board_size_choice(input)
+    IO.gets("")
+    |> clean_input
+    |> map_to_dimension
   end
 
-  defp map_board_size_choice("1"), do: 3
-  defp map_board_size_choice("2"), do: 4
-  defp map_board_size_choice(input), do: invalid_board_size(input)
+  defp map_to_dimension("1"), do: 3
+  defp map_to_dimension("2"), do: 4
+  defp map_to_dimension(input), do: invalid_board_size(input)
 
   defp invalid_board_size(input) do
     IO.puts "Sorry, #{input} doesn't quite work. Please enter 1 or 2!"
@@ -180,6 +181,5 @@ defmodule Ui do
     end
   end
 
-  defp line(3), do: "\n-------------\n"
-  defp line(4), do: "\n------------------\n"
+  defp line(dimension), do: "\n#{String.duplicate("-", (dimension * 4))}-\n"
 end

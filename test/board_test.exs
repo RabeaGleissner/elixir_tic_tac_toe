@@ -4,20 +4,16 @@ defmodule BoardTest do
   @empty_3_by_3_board Board.empty_board
   @empty_4_by_4_board Board.empty_board(4)
 
-  test "returns an empty 3x3 board" do
+  test "returns an empty board" do
     refute Board.board_full?(Board.empty_board)
   end
 
   test "3x3 board has 9 cells" do
-    assert length(@empty_3_by_3_board) == 9
-  end
-
-  test "returns an empty 4x4 board" do
-    refute Board.board_full?(Board.empty_board(4))
+    assert length(Board.empty_board(3)) == 9
   end
 
   test "4x4 board has 16 cells" do
-    assert length(@empty_4_by_4_board) == 16
+    assert length(Board.empty_board(4)) == 16
   end
 
   test "places mark on empty board" do
@@ -52,8 +48,8 @@ defmodule BoardTest do
     assert Board.winner?([
       "X","O","O","O",
        5, "X", 7,  8,
-       7,  8, "X",10,
-       11, 12, 13,"X"
+       9,  10,"X",12,
+       13, 14, 15,"X"
     ])
   end
 

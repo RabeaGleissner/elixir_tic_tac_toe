@@ -20,7 +20,9 @@ defmodule Board do
   def game_over?(board), do: winner?(board) || draw?(board)
 
   def winner?(board) do
-    Enum.map(current_lines(board), fn(line) -> all_same_marks?(line) end)
+    board
+    |> current_lines
+    |> Enum.map(fn(line) -> all_same_marks?(line) end)
     |> Enum.any?(fn(x) -> x == true end)
   end
 
@@ -73,16 +75,30 @@ defmodule Board do
     |> transpose
   end
 
-  defp diagonals(board), do: diagonals(board, dimension(board))
-  defp diagonals(board, dimension) do
-    if dimension == 3 do
-      [[Enum.at(board, 0), Enum.at(board, 4), Enum.at(board, 8)],
-       [Enum.at(board, 2), Enum.at(board, 4), Enum.at(board, 6)]]
-    else
-      [[Enum.at(board, 0), Enum.at(board, 5), Enum.at(board, 10), Enum.at(board, 15)],
-       [Enum.at(board, 3), Enum.at(board, 6), Enum.at(board, 9), Enum.at(board, 12)]]
-    end
+  defp diagonals(board) do
+    [
+      backward_diagonal([], board, dimension(board), dimension(board) - 1),
+      forward_diagonal([], board, dimension(board), dimension(board), dimension(board) - 1)
+    ]
   end
+
+  defp backward_diagonal(diagonal, _, _, -1), do: diagonal
+  defp backward_diagonal(diagonal, board, dimension, counter) do
+    board
+    |> Enum.at((dimension * counter) + counter)
+    |> add_to_diagonals(diagonal)
+    |> backward_diagonal(board, dimension, counter - 1)
+  end
+
+  defp forward_diagonal(diagonal, _, _, 0, _), do: Enum.reverse(diagonal)
+  defp forward_diagonal(diagonal, board, dimension, counter, offset) do
+    board
+    |> Enum.at(offset)
+    |> add_to_diagonals(diagonal)
+    |> forward_diagonal(board, dimension, counter - 1, offset + (dimension - 1))
+  end
+
+  defp add_to_diagonals(cell, diagonal), do: List.insert_at(diagonal, 0, cell)
 
   defp update_board({:valid, position}, board) do
     next_board = board
@@ -111,8 +127,8 @@ defmodule Board do
   end
 
   defp all_same_marks?(line) do
-    result = Enum.map(line, fn(cell) -> List.first(line) == cell end)
-    !Enum.any?(result, fn(x) -> x == false end)
+    [head | elements] = line
+    Enum.all?(elements, fn(element) -> element == head end)
   end
 
   defp available?(cell), do: !mark?(cell)
