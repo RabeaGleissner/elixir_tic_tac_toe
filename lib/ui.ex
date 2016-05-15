@@ -26,10 +26,11 @@ defmodule Ui do
 
   def print_board(board) do
     clear_screen
+    dotted_line = line(Board.dimension(board))
     board
     |> Board.rows
     |> Enum.map(&draw_line/1)
-    |> Enum.join(line(Board.dimension(board)))
+    |> Enum.join(dotted_line)
     |> IO.puts
       board
   end

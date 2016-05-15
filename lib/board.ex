@@ -22,8 +22,7 @@ defmodule Board do
   def winner?(board) do
     board
     |> current_lines
-    |> Enum.map(fn(line) -> all_same_marks?(line) end)
-    |> Enum.any?(fn(x) -> x == true end)
+    |> Enum.any?(&all_same_marks?/1)
   end
 
   def draw?(board), do: board_full?(board) && !winner?(board)
@@ -85,20 +84,28 @@ defmodule Board do
   defp backward_diagonal(diagonal, _, _, -1), do: diagonal
   defp backward_diagonal(diagonal, board, dimension, counter) do
     board
-    |> Enum.at((dimension * counter) + counter)
-    |> add_to_diagonals(diagonal)
+    |> cell_for_backward_diagonal(dimension, counter)
+    |> add_to_diagonal(diagonal)
     |> backward_diagonal(board, dimension, counter - 1)
   end
 
   defp forward_diagonal(diagonal, _, _, 0, _), do: Enum.reverse(diagonal)
   defp forward_diagonal(diagonal, board, dimension, counter, offset) do
     board
-    |> Enum.at(offset)
-    |> add_to_diagonals(diagonal)
-    |> forward_diagonal(board, dimension, counter - 1, offset + (dimension - 1))
+    |> cell_for_forward_diagonal(offset)
+    |> add_to_diagonal(diagonal)
+    |> forward_diagonal(board, dimension, counter - 1, index_of_next_cell(offset, dimension))
   end
 
-  defp add_to_diagonals(cell, diagonal), do: List.insert_at(diagonal, 0, cell)
+  defp add_to_diagonal(cell, diagonal), do: List.insert_at(diagonal, 0, cell)
+
+  defp cell_for_backward_diagonal(board, dimension, counter) do
+    Enum.at(board, (dimension * counter) + counter)
+  end
+
+  defp cell_for_forward_diagonal(board, offset), do: Enum.at(board, offset)
+
+  defp index_of_next_cell(offset, dimension), do: offset + (dimension - 1)
 
   defp update_board({:valid, position}, board) do
     next_board = board
@@ -126,9 +133,8 @@ defmodule Board do
     all_same_marks?(line)
   end
 
-  defp all_same_marks?(line) do
-    [head | elements] = line
-    Enum.all?(elements, fn(element) -> element == head end)
+  defp all_same_marks?([head | other_marks]) do
+    Enum.all?(other_marks, fn(element) -> element == head end)
   end
 
   defp available?(cell), do: !mark?(cell)
