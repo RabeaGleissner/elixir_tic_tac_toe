@@ -14,10 +14,9 @@ defmodule Ui do
     get_game_mode
   end
 
-  defp print_game_modes([], print_options), do: IO.write print_options
-  defp print_game_modes([{number, option, _} | rest], print_options) do
-    updated = print_options <> "#{number} - #{option}\n"
-    print_game_modes(rest, updated)
+  def ask_for_board_size do
+    IO.puts "Please choose a board size:\n\n1 - 3x3 board\n2 - 4x4 board"
+    get_board_size
   end
 
   def play_again? do
@@ -27,16 +26,17 @@ defmodule Ui do
 
   def print_board(board) do
     clear_screen
+    dotted_line = line(Board.dimension(board))
     board
     |> Board.rows
     |> Enum.map(&draw_line/1)
-    |> Enum.join(line)
+    |> Enum.join(dotted_line)
     |> IO.puts
       board
   end
 
   def ask_for_position(board) do
-    IO.puts "Please choose a position:"
+    IO.puts "\nPlease choose a position:"
     get_users_position(board)
   end
 
@@ -46,6 +46,8 @@ defmodule Ui do
     |> Board.result
     |> message
   end
+
+  def clear_screen, do: IO.write @clear_screen
 
   def say_bye do
     clear_screen
@@ -80,6 +82,27 @@ defmodule Ui do
     |> List.last
   end
 
+  defp get_board_size do
+    IO.gets("")
+    |> clean_input
+    |> map_to_dimension
+  end
+
+  defp map_to_dimension("1"), do: 3
+  defp map_to_dimension("2"), do: 4
+  defp map_to_dimension(input), do: invalid_board_size(input)
+
+  defp invalid_board_size(input) do
+    IO.puts "Sorry, #{input} doesn't quite work. Please enter 1 or 2!"
+    ask_for_board_size
+  end
+
+  defp print_game_modes([], printable), do: IO.write printable
+  defp print_game_modes([{number, option, _} | rest], printable) do
+    updated_printable = printable <> "#{number} - #{option}\n"
+    print_game_modes(rest, updated_printable)
+  end
+
   defp get_users_position(board) do
     input = clean_input(IO.gets(""))
     case valid_position?(input, board) do
@@ -99,11 +122,19 @@ defmodule Ui do
     ask_for_position(board)
   end
 
-  defp clear_screen, do: IO.write @clear_screen
-
   defp draw_line(line) do
-    Enum.join(line, " | ") <> "\n"
+    Enum.map(line, fn(cell) -> evenly_spaced_cell(cell) end)
+    |> Enum.join(" | ")
   end
+
+  defp evenly_spaced_cell(cell) do
+    cell
+    |> ensure_is_string
+    |> String.rjust(2)
+  end
+
+  defp ensure_is_string(input) when is_integer(input), do: Integer.to_string(input)
+  defp ensure_is_string(input), do: input
 
   defp message(:draw), do: IO.puts "It's a draw.\n\n"
   defp message({:winner, winner}) do
@@ -151,7 +182,5 @@ defmodule Ui do
     end
   end
 
-  defp line do
-    "---------\n"
-  end
+  defp line(dimension), do: "\n#{String.duplicate("-", (dimension * 4))}-\n"
 end

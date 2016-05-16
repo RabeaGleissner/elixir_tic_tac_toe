@@ -1,14 +1,23 @@
 defmodule BoardTest do
   use ExUnit.Case
 
-  @empty_board Board.empty_board
+  @empty_3_by_3_board Board.empty_board
+  @empty_4_by_4_board Board.empty_board(4)
 
   test "returns an empty board" do
-    refute Board.board_full?(@empty_board)
+    refute Board.board_full?(Board.empty_board)
+  end
+
+  test "3x3 board has 9 cells" do
+    assert length(Board.empty_board(3)) == 9
+  end
+
+  test "4x4 board has 16 cells" do
+    assert length(Board.empty_board(4)) == 16
   end
 
   test "places mark on empty board" do
-    assert Board.place_mark(@empty_board, 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
+    assert Board.place_mark(@empty_3_by_3_board, 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
   end
 
   test "cannot place mark in a position that is taken" do
@@ -19,11 +28,28 @@ defmodule BoardTest do
     assert Board.next_player_mark(["X",2,3,4,5,6,7,8,9]) == "O"
   end
 
-  test "knows that it is a winning board" do
+  test "returns all lines of the current game state" do
+    assert Board.current_lines([
+      "X", "X", "X",
+      "O", "O", 6,
+       7,   8, 9
+    ]) == [["X", "X", "X"], ["O", "O", 6], [7,8,9], ["X", "O", 7], ["X", "O", 8], ["X", 6, 9], ["X", "O", 9], ["X", "O", 7]]
+  end
+
+  test "knows that it is a winning 3x3 board" do
     assert Board.winner?([
       "X", "X", "X",
       "O", "O", 6,
        7,   8,  9
+    ])
+  end
+
+  test "knows that it is a winning 4x4 board" do
+    assert Board.winner?([
+      "X","O","O","O",
+       5, "X", 7,  8,
+       9,  10,"X",12,
+       13, 14, 15,"X"
     ])
   end
 
@@ -65,10 +91,6 @@ defmodule BoardTest do
       "O", "X", "X",
       "X", "O", "O"
     ])
-   end
-
-   test "board is empty" do
-     refute Board.board_full?([1,2,3,4,5,6,7,8,9])
    end
 
   test "knows that the position is unavailable" do
