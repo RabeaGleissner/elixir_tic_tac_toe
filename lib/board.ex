@@ -76,36 +76,30 @@ defmodule Board do
 
   defp diagonals(board) do
     [
-      backward_diagonal([], board, dimension(board), dimension(board) - 1),
-      forward_diagonal([], board, dimension(board), dimension(board), dimension(board) - 1)
+      diagonal([], board, dimension(board), dimension(board) - 1),
+      diagonal([], reverse_rows(board), dimension(board), dimension(board) - 1)
     ]
   end
 
-  defp backward_diagonal(diagonal, _, _, -1), do: diagonal
-  defp backward_diagonal(diagonal, board, dimension, counter) do
+  defp diagonal(diagonal, _, _, -1), do: diagonal
+  defp diagonal(diagonal, board, dimension, counter) do
     board
-    |> cell_for_backward_diagonal(dimension, counter)
+    |> cell_for_diagonal(dimension, counter)
     |> add_to_diagonal(diagonal)
-    |> backward_diagonal(board, dimension, counter - 1)
+    |> diagonal(board, dimension, counter - 1)
   end
 
-  defp forward_diagonal(diagonal, _, _, 0, _), do: Enum.reverse(diagonal)
-  defp forward_diagonal(diagonal, board, dimension, counter, offset) do
-    board
-    |> cell_for_forward_diagonal(offset)
-    |> add_to_diagonal(diagonal)
-    |> forward_diagonal(board, dimension, counter - 1, index_of_next_cell(offset, dimension))
+  defp reverse_rows(board) do
+    rows(board)
+    |> Enum.map(fn(row) -> Enum.reverse(row) end)
+    |> List.flatten
   end
 
   defp add_to_diagonal(cell, diagonal), do: List.insert_at(diagonal, 0, cell)
 
-  defp cell_for_backward_diagonal(board, dimension, counter) do
+  defp cell_for_diagonal(board, dimension, counter) do
     Enum.at(board, (dimension * counter) + counter)
   end
-
-  defp cell_for_forward_diagonal(board, offset), do: Enum.at(board, offset)
-
-  defp index_of_next_cell(offset, dimension), do: offset + (dimension - 1)
 
   defp update_board({:valid, position}, board) do
     next_board = board
