@@ -1,10 +1,10 @@
 defmodule UnbeatablePlayer do
-  require IEx
 
-  def make_move(board), do: make_move(board, "X")
+  def make_move(board), do: make_move(board, Board.next_player_mark(board))
   def make_move(board, computer_mark) do
     [_, move] = minimax(board, computer_mark, computer_mark)
-    move
+    {:ok, next_board } = Board.place_mark(board, move)
+    next_board
   end
 
   def minimax(board, computer_mark, current_mark) do
