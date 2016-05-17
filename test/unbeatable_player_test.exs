@@ -6,7 +6,7 @@ defmodule UnbeatablePlayerTest do
       "O","O","O",
       "X","X", 6,
        7,  8,  9
-    ], "O", 4) == 4
+    ], "O") == 1
   end
 
   test "assigns a -1 if the computer's opponent wins" do
@@ -14,7 +14,7 @@ defmodule UnbeatablePlayerTest do
       "O","O", 3,
       "X","X","X",
        7,  8,  9
-    ], "O", 4) == -4
+    ], "O") == -1
   end
 
   test "assigns a 0 if the game is a draw" do
@@ -22,7 +22,7 @@ defmodule UnbeatablePlayerTest do
       "O","O","X",
       "X","X","O",
       "O","O","X"
-    ], "O", 0) == 0
+    ], "O") == 0
   end
 
   test "picks the winning move out of two" do
