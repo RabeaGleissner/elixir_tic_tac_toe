@@ -1,36 +1,36 @@
 defmodule UnbeatablePlayer do
   @initial_alpha_value -10000
   @initial_beta_value 10000
+  @move_placeholder -1
 
   def make_move(board), do: make_move(board, Board.next_player_mark(board))
   def make_move(board, computer_mark) do
     [_, move] = minimax(board, computer_mark, computer_mark, 9, @initial_alpha_value, @initial_beta_value)
-    {:ok, next_board } = Board.place_mark(board, move)
+    {:ok, next_board} = Board.place_mark(board, move)
     next_board
   end
 
   def minimax(board, computer_mark, current_mark, depth, alpha, beta) do
-    best_score = initialize_best_score(current_mark, computer_mark)
-    best_move = -1
-
     if Board.game_over?(board) || depth == 0 do
       [score_for_move(board, computer_mark, depth), -1]
     else
-      play_next_move(board, computer_mark, current_mark, best_score, best_move, Board.available_positions(board), depth, alpha, beta)
+      play_next_move(board, computer_mark, current_mark, depth, alpha, beta)
     end
   end
 
-  def play_next_move(_,_,_, best_score, best_move, [], _,_,_), do: [best_score, best_move]
-  def play_next_move(board, computer_mark, current_mark, existing_score, existing_best_move, [next_move | other_available_positions], depth, alpha, beta) do
-
-    board
-    |> Board.place_mark(next_move)
-    |> get_next_board
-    |> minimax(computer_mark, switch_mark(current_mark), depth - 1, alpha, beta)
-    |> get_new_score
-    |> find_best_score(existing_score, current_mark, computer_mark, next_move, existing_best_move)
-    |> prune(board, computer_mark, current_mark, other_available_positions, depth, alpha, beta)
-
+  def play_next_move(board, computer_mark, current_mark, depth, alpha, beta) do
+    Board.available_positions(board)
+    |> Enum.reduce_while([initialize_score(current_mark, computer_mark), @move_placeholder],
+      fn(next_move),
+      [existing_score, existing_best_move] ->
+      board
+      |> Board.place_mark(next_move)
+      |> get_next_board
+      |> minimax(computer_mark, switch_mark(current_mark), depth - 1, alpha, beta)
+      |> get_new_score
+      |> find_best_score(existing_score, current_mark, computer_mark, next_move, existing_best_move)
+      |> prune(computer_mark, current_mark, alpha, beta)
+    end)
   end
 
   defp get_next_board({_, next_board}), do: next_board
@@ -44,14 +44,14 @@ defmodule UnbeatablePlayer do
     end
   end
 
-  defp prune({best_score, best_move}, board, computer_mark, current_mark, other_available_positions, depth, alpha, beta) do
+  defp prune({best_score, best_move}, computer_mark, current_mark, alpha, beta) do
     new_alpha = update_alpha(alpha, best_score, current_mark, computer_mark)
     new_beta = update_beta(beta, best_score, current_mark, computer_mark)
 
     if new_alpha >= new_beta do
-      [best_score, best_move]
+      {:halt, [best_score, best_move]}
     else
-      play_next_move(board, computer_mark, current_mark, best_score, best_move, other_available_positions, depth, alpha, beta)
+      {:cont, [best_score, best_move]}
     end
   end
 
@@ -87,7 +87,7 @@ defmodule UnbeatablePlayer do
     if (current_mark == "X"), do: "O", else: "X"
   end
 
-  defp initialize_best_score(current_mark, computer_mark) do
+  defp initialize_score(current_mark, computer_mark) do
     if (current_mark == computer_mark), do: -1000, else: 1000
   end
 end
