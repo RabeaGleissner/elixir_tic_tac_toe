@@ -32,8 +32,7 @@ defmodule Board do
   def winning_mark(board) do
     board
     |> current_lines
-    |> Enum.filter(fn(line) -> winning_line(line) end)
-    |> List.flatten
+    |> Enum.find([:no_winner], &winning_line/1)
     |> List.first
   end
 
