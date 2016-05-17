@@ -29,7 +29,13 @@ defmodule Board do
 
   def available_positions(board), do: Enum.filter(board, &available?/1)
 
-  def winning_mark(board), do: winning_mark(board, current_lines(board))
+  def winning_mark(board) do
+    board
+    |> current_lines
+    |> Enum.filter(fn(line) -> winning_line(line) end)
+    |> List.flatten
+    |> List.first
+  end
 
   def position_available?(board, position) do
     cell = Enum.at(board, position - 1)
@@ -90,8 +96,9 @@ defmodule Board do
   end
 
   defp reverse_rows(board) do
-    rows(board)
-    |> Enum.map(fn(row) -> Enum.reverse(row) end)
+    board
+    |> rows
+    |> Enum.map(&Enum.reverse/1)
     |> List.flatten
   end
 
@@ -112,15 +119,6 @@ defmodule Board do
 
   defp update(mark, board, position) do
     List.replace_at(board, position , mark)
-  end
-
-  defp winning_mark(_, []), do: :no_winner
-  defp winning_mark(board, [line | rest]) do
-    if winning_line(line) do
-      List.first(line)
-    else
-      winning_mark(board, rest)
-    end
   end
 
   defp winning_line(line) do
