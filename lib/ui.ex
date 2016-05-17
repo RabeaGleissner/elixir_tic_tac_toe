@@ -5,6 +5,8 @@ defmodule Ui do
     {1, "Human vs Human", :human_vs_human},
     {2, "Human vs Random", :human_vs_random},
     {3, "Random vs Human", :random_vs_human},
+    {4, "Human vs Unbeatable", :human_vs_unbeatable},
+    {5, "Unbeatable vs Human", :unbeatable_vs_human},
   ]
 
   def ask_for_game_mode do
