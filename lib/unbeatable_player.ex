@@ -1,39 +1,49 @@
 defmodule UnbeatablePlayer do
-  @initial_alpha_value -10000
-  @initial_beta_value 10000
+  @initial_alpha -10000
+  @initial_beta 10000
   @move_placeholder -1
 
   def make_move(board), do: make_move(board, Board.next_player_mark(board))
   def make_move(board, computer_mark) do
-    [_, move] = minimax(board, computer_mark, computer_mark, 9, @initial_alpha_value, @initial_beta_value)
+    [_, move] = minimax(board, computer_mark, computer_mark, 9, @initial_alpha, @initial_beta)
     {:ok, next_board} = Board.place_mark(board, move)
     next_board
   end
 
   def minimax(board, computer_mark, current_mark, depth, alpha, beta) do
-    if Board.game_over?(board) || depth == 0 do
-      [score_for_move(board, computer_mark, depth), -1]
-    else
-      play_next_move(board, computer_mark, current_mark, depth, alpha, beta)
-    end
+    board
+    |> finished?(depth)
+    |> result(computer_mark, current_mark, depth, alpha, beta)
   end
 
-  def play_next_move(board, computer_mark, current_mark, depth, alpha, beta) do
-    Board.available_positions(board)
+  def play_move(board, computer_mark, current_mark, depth, alpha, beta) do
+    board
+    |> Board.available_positions
     |> Enum.reduce_while([initialize_score(current_mark, computer_mark), @move_placeholder],
-      fn(next_move),
-      [existing_score, existing_best_move] ->
+      fn(next_move), [existing_score, existing_best_move] ->
       board
       |> Board.place_mark(next_move)
       |> get_next_board
-      |> minimax(computer_mark, switch_mark(current_mark), depth - 1, alpha, beta)
+      |> minimax(computer_mark, switch(current_mark), depth - 1, alpha, beta)
       |> get_new_score
       |> find_best_score(existing_score, current_mark, computer_mark, next_move, existing_best_move)
       |> prune(computer_mark, current_mark, alpha, beta)
     end)
   end
 
+  defp finished?(board, depth) do
+    if depth == 0 || Board.game_over?(board), do: {:finished, board}, else: {:not_finished, board}
+  end
+
+  defp result({:finished, board}, computer_mark, _, depth, _,_) do
+    [score_for_move(board, computer_mark, depth), -1]
+  end
+  defp result({:not_finished, board}, computer_mark, current_mark, depth, alpha, beta) do
+      play_move(board, computer_mark, current_mark, depth, alpha, beta)
+  end
+
   defp get_next_board({_, next_board}), do: next_board
+
   defp get_new_score([new_score, _]), do: new_score
 
   defp find_best_score(new_score, existing_score, current_mark, computer_mark, next_move, existing_best_move) do
@@ -83,7 +93,7 @@ defmodule UnbeatablePlayer do
       new_score < best_score
   end
 
-  defp switch_mark(current_mark) do
+  defp switch(current_mark) do
     if (current_mark == "X"), do: "O", else: "X"
   end
 
