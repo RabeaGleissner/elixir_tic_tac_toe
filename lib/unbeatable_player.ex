@@ -11,7 +11,7 @@ defmodule UnbeatablePlayer do
 
   def minimax(board, computer_mark, current_mark, depth, alpha, beta) do
     best_score = initialize_best_score(current_mark, computer_mark)
-    best_move = -2
+    best_move = -1
 
     if Board.game_over?(board) || depth == 0 do
       [score_for_move(board, computer_mark, depth), -1]
@@ -22,16 +22,29 @@ defmodule UnbeatablePlayer do
 
   def play_next_move(_,_,_, best_score, best_move, [], _,_,_), do: [best_score, best_move]
   def play_next_move(board, computer_mark, current_mark, existing_score, existing_best_move, [next_move | other_available_positions], depth, alpha, beta) do
-    {_, next_board} = Board.place_mark(board, next_move)
-    [new_score, _] = minimax(next_board, computer_mark, switch_mark(current_mark), depth - 1, alpha, beta)
 
-    {best_score, best_move} =
+    board
+    |> Board.place_mark(next_move)
+    |> get_next_board
+    |> minimax(computer_mark, switch_mark(current_mark), depth - 1, alpha, beta)
+    |> get_new_score
+    |> find_best_score(existing_score, current_mark, computer_mark, next_move, existing_best_move)
+    |> prune(board, computer_mark, current_mark, other_available_positions, depth, alpha, beta)
+
+  end
+
+  defp get_next_board({_, next_board}), do: next_board
+  defp get_new_score([new_score, _]), do: new_score
+
+  defp find_best_score(new_score, existing_score, current_mark, computer_mark, next_move, existing_best_move) do
     if new_best_score?(current_mark, computer_mark, new_score, existing_score) do
       {new_score, next_move}
     else
       {existing_score, existing_best_move}
     end
+  end
 
+  defp prune({best_score, best_move}, board, computer_mark, current_mark, other_available_positions, depth, alpha, beta) do
     new_alpha = update_alpha(alpha, best_score, current_mark, computer_mark)
     new_beta = update_beta(beta, best_score, current_mark, computer_mark)
 
