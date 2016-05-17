@@ -82,30 +82,25 @@ defmodule Board do
 
   defp diagonals(board) do
     [
-      diagonal([], board, dimension(board), dimension(board) - 1),
-      diagonal([], reverse_rows(board), dimension(board), dimension(board) - 1)
+      diagonal(board),
+      diagonal(reverse_rows(board)),
     ]
   end
 
-  defp diagonal(diagonal, _, _, -1), do: diagonal
-  defp diagonal(diagonal, board, dimension, counter) do
+  defp diagonal(board) do
     board
-    |> cell_for_diagonal(dimension, counter)
-    |> add_to_diagonal(diagonal)
-    |> diagonal(board, dimension, counter - 1)
+    |> rows
+    |> Enum.with_index
+    |> Enum.map(&get_cell/1)
   end
+
+  defp get_cell({row, index}), do: Enum.at(row, index)
 
   defp reverse_rows(board) do
     board
     |> rows
     |> Enum.map(&Enum.reverse/1)
     |> List.flatten
-  end
-
-  defp add_to_diagonal(cell, diagonal), do: List.insert_at(diagonal, 0, cell)
-
-  defp cell_for_diagonal(board, dimension, counter) do
-    Enum.at(board, (dimension * counter) + counter)
   end
 
   defp update_board({:valid, position}, board) do
