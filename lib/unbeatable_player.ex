@@ -20,7 +20,7 @@ defmodule UnbeatablePlayer do
     board
     |> Board.available_positions
     |> Enum.reduce_while([initialize_score(current_mark, computer_mark), @move_placeholder],
-      fn(next_move), [existing_score, existing_best_move] ->
+       fn(next_move), [existing_score, existing_best_move] ->
       board
       |> Board.place_mark(next_move)
       |> get_next_board
@@ -39,7 +39,7 @@ defmodule UnbeatablePlayer do
     [score_for_move(board, computer_mark, depth), -1]
   end
   defp result({:not_finished, board}, computer_mark, current_mark, depth, alpha, beta) do
-      play_move(board, computer_mark, current_mark, depth, alpha, beta)
+    play_move(board, computer_mark, current_mark, depth, alpha, beta)
   end
 
   defp get_next_board({_, next_board}), do: next_board
@@ -86,11 +86,11 @@ defmodule UnbeatablePlayer do
   end
 
   defp new_best_score?(current_mark, computer_mark, new_score, best_score) when current_mark == computer_mark do
-      new_score > best_score
+    new_score > best_score
   end
 
   defp new_best_score?(current_mark, computer_mark, new_score, best_score) when current_mark != computer_mark do
-      new_score < best_score
+    new_score < best_score
   end
 
   defp switch(current_mark) do

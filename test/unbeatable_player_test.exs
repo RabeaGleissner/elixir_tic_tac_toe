@@ -79,12 +79,12 @@ defmodule UnbeatablePlayerTest do
     assert Board.position_available?(next_board, 2) == {:taken, 2}
   end
 
-  #test "creates a fork if possible" do
-    #next_board = UnbeatablePlayer.make_move([
-        #1, "X",3,
-       #"O", 5, 6,
-       #"X","X","O"
-    #])
-    #assert Board.position_available?(next_board, 5) == {:taken, 5}
-  #end
+  test "creates a fork if possible" do
+    next_board = UnbeatablePlayer.make_move([
+        1, "X",3,
+       "O", 5, 6,
+       "X","X","O"
+    ])
+    assert Board.position_available?(next_board, 5) == {:taken, 5}
+  end
 end
