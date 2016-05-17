@@ -15,6 +15,17 @@ defmodule Board do
 
   def mark_count(mark, board), do: Enum.count(board, fn(cell) -> cell == mark end)
 
+  def game_outcome(board) do
+    cond do
+      winner?(board) ->
+        :winner
+      draw?(board) ->
+        :draw
+      true ->
+        :game_ongoing
+    end
+  end
+
   def game_over?(board), do: winner?(board) || draw?(board)
 
   def winner?(board) do
