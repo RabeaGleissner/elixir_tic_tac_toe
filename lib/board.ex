@@ -115,7 +115,7 @@ defmodule Board do
     next_board = board
                   |> next_player_mark
                   |> update(board, position - 1)
-    {:ok, next_board}
+                  next_board
   end
 
   defp update_board(error, _), do: error
