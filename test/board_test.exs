@@ -116,28 +116,4 @@ defmodule BoardTest do
       "X", "X","O"
     ]) == [2,3,6]
   end
-
-  test "returns game end state winner" do
-    assert Board.game_outcome([
-      "O",  2,  3,
-      "X", "O", 6,
-      "X", "X","X"
-    ]) == :winner
-  end
-
-  test "returns game end state draw" do
-    assert Board.game_outcome([
-      "O", "X","O",
-      "X", "O","X",
-      "X", "O","X"
-    ]) == :draw
-  end
-
-  test "returns :game_ongoing when the game is not over" do
-    assert Board.game_outcome([
-       1,  2,  3,
-      "X","O","X",
-      "X","O","X"
-    ]) == :game_ongoing
-  end
 end
