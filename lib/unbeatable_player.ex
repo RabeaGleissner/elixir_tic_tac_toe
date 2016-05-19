@@ -4,9 +4,13 @@ defmodule UnbeatablePlayer do
 
   def make_move(board), do: make_move(board, Board.next_player_mark(board))
   def make_move(board, computer_mark) do
+    Board.place_mark(board, calculate_move(board, computer_mark))
+  end
+
+  def calculate_move(board, computer_mark) do
     [{_, move}, {_,_}] = minimax(board, {computer_mark, computer_mark}, 9, {@initial_alpha, @initial_beta})
     move
-    #Board.place_mark(board, move)
+
   end
 
   def minimax(current_board, marks, depth, alpha_beta) do
