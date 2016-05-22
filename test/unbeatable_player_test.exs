@@ -1,20 +1,12 @@
 defmodule UnbeatablePlayerTest do
   use ExUnit.Case
 
-  test "assigns a 1 if the computer player wins" do
+  test "assigns a 1 if it is a winning board" do
     assert UnbeatablePlayer.score([
       "O","O","O",
       "X","X", 6,
        7,  8,  9
-    ], "O", 6) == 6
-  end
-
-  test "assigns a -1 if the computer's opponent wins" do
-    assert UnbeatablePlayer.score([
-      "O","O", 3,
-      "X","X","X",
-       7,  8,  9
-    ], "O", 6) == -6
+    ]) == 1
   end
 
   test "assigns a 0 if the game is a draw" do
@@ -22,7 +14,7 @@ defmodule UnbeatablePlayerTest do
       "O","O","X",
       "X","X","O",
       "O","O","X"
-    ], "O", 0) == 0
+    ]) == 0
   end
 
   test "picks the winning move out of two" do
@@ -39,7 +31,7 @@ defmodule UnbeatablePlayerTest do
        "X","X",3,
        "X","O",6,
        "O","X",9
-    ], "O")
+    ])
   end
 
   test "makes a winning move for a horizontal win" do
@@ -47,7 +39,7 @@ defmodule UnbeatablePlayerTest do
        "X", 2,  3,
         4, "O","O",
        "X", 8, "X"
-    ], "O")
+    ])
   end
 
   test "makes a winning move for a vertical win" do
@@ -55,7 +47,7 @@ defmodule UnbeatablePlayerTest do
        "O", 2,  3,
        "X","O","O",
        "X","O","X"
-    ], "O")
+    ])
   end
 
   test "blocks an opponents winning move" do
@@ -63,7 +55,7 @@ defmodule UnbeatablePlayerTest do
        "X","O",3,
        "X", 5, 6,
        "O", 8,"X"
-    ], "O")
+    ])
   end
 
   test "blocks opponent's fork" do
@@ -71,7 +63,7 @@ defmodule UnbeatablePlayerTest do
        "X",2, 3,
         4,"O",6,
         7, 8,"X"
-    ], "O")
+    ])
   end
 
   test "creates a fork if possible" do
@@ -79,6 +71,6 @@ defmodule UnbeatablePlayerTest do
         1, "X",3,
        "O", 5, 6,
        "X","X","O"
-    ], "O")
+    ])
   end
 end
