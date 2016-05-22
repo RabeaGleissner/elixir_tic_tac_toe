@@ -4,14 +4,12 @@ defmodule UnbeatablePlayer do
   @initial_score 10.0
   @move_placehoder -1
 
-  def make_move(board), do: make_move(board, Board.next_player_mark(board))
-  def make_move(board, computer_mark) do
+  def make_move(board, _) do
     Board.place_mark(board, calculate_move(board))
   end
 
   def calculate_move(board) do
-    [{_, move}, _] = negamax(board, Enum.count(Board.available_positions(board)), @initial_alpha, @initial_beta)
-    move
+    negamax(board, Enum.count(Board.available_positions(board)), @initial_alpha, @initial_beta)[:best_move]
   end
 
   def negamax(current_board, depth, alpha, beta) do
@@ -20,7 +18,7 @@ defmodule UnbeatablePlayer do
     |> result(current_board, depth, {alpha, beta})
   end
 
-  defp result(:finish, board, depth, alpha_beta), do: [{score(board), @move_placehoder}, alpha_beta]
+  defp result(:finish, board, _, _), do: %{:best_score => score(board), :best_move => @move_placehoder}
   defp result(:continue, board, depth, {alpha, beta}) do
     board
     |> Board.available_positions
@@ -29,25 +27,41 @@ defmodule UnbeatablePlayer do
     end)
   end
 
-  defp check_result(board, move, [{current_best_score, current_best_move}, {alpha, beta}], depth) do
-    if alpha >= beta do
-      [{current_best_score, current_best_move}, {alpha, beta}]
+  defp check_result(board, move, current_best, depth) do
+    if current_best[:alpha] >= current_best[:beta] do
+      current_best
     else
-      [{new_best_score, new_best_move}, {alpha, beta}] = negate_score(negamax(board, depth - 1, -alpha, -beta))
-      if new_best_score > current_best_score do
-        [{new_best_score, move}, {new_best_score, beta}]
-      else
-        [{current_best_score, current_best_move}, {alpha, beta}]
-      end
+      negate_score(negamax(board, depth - 1, -current_best[:beta], -current_best[:alpha]))
+      |> better_score?(current_best)
+      |> update_score(move)
     end
   end
 
-  defp negate_score([{current_best_score, current_best_move}, {alpha, beta}]) do
-    [{-current_best_score, current_best_move}, {alpha, beta}]
+  defp update_score({false, new_result, current_best}, move), do: current_best
+  defp update_score({true, new_result, current_best}, move) do
+    %{
+      :best_score => new_result[:best_score] ,
+      :best_move => move,
+      :alpha => new_result[:best_score],
+      :beta => current_best[:beta],
+    }
+  end
+
+  defp better_score?(new_score, old_score) do
+    {new_score[:best_score] > old_score[:alpha], new_score, old_score}
+  end
+
+  defp negate_score(result) do
+    %{:best_score => -result[:best_score], :best_move => result[:best_move]}
   end
 
   defp accumulator(alpha, beta) do
-    [{-@initial_score, @move_placehoder}, {alpha, beta}]
+    %{
+      :best_score => -@initial_score,
+      :best_move => @move_placehoder,
+      :alpha => alpha,
+      :beta => beta,
+    }
   end
 
   def score(board) do
