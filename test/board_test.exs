@@ -77,6 +77,14 @@ defmodule BoardTest do
     ]) == "O"
   end
 
+  test "returns default of :no_winner if there isn't one" do
+    assert Board.winning_mark([
+      "O",  2,  3,
+      "X", "O", 6,
+      "X", "X", 9
+    ]) == :no_winner
+  end
+
   test "knows that board is a draw" do
     assert Board.draw?([
       "O", "X", "O",
