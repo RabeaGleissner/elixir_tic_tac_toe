@@ -8,7 +8,7 @@ defmodule UnbeatablePlayer do
   end
 
   def calculate_move(board, computer_mark) do
-    [{_, move}, {_,_}] = minimax(board, {computer_mark, computer_mark}, 9, {@initial_alpha, @initial_beta})
+    [{_, move} | _ ] = minimax(board, {computer_mark, computer_mark}, 9, {@initial_alpha, @initial_beta})
     move
 
   end
@@ -40,8 +40,8 @@ defmodule UnbeatablePlayer do
   end
 
   defp update_alpha_beta([{score, move}, {alpha, beta}], computer_mark, current_mark) do
-    #new_alpha = if computer_mark == current_mark, do: Enum.max([alpha, score]), else: alpha
-    #new_beta = if computer_mark != current_mark, do: Enum.min([beta, score]), else: beta
+    # new_alpha = if computer_mark == current_mark, do: Enum.max([alpha, score]), else: alpha
+    # new_beta = if computer_mark != current_mark, do: Enum.min([beta, score]), else: beta
     new_alpha = alpha
     new_beta = beta
 
@@ -59,7 +59,7 @@ defmodule UnbeatablePlayer do
   end
 
   defp current_player({mark, mark}), do: :computer
-  defp current_player({_, _}), do: :opponent
+  defp current_player(_), do: :opponent
 
   defp better_score(:computer, current_score, best_score), do: current_score > best_score
   defp better_score(:opponent, current_score, best_score), do: current_score < best_score
@@ -67,22 +67,16 @@ defmodule UnbeatablePlayer do
   defp update_score(true, updated_scored_position, _, alpha_beta), do: [updated_scored_position, alpha_beta]
   defp update_score(false, _, best_scored_position, alpha_beta), do: [best_scored_position, alpha_beta]
 
-  def score(board, computer_mark, depth) do
-    board
-    |> Board.winning_mark
-    |> winning_player(computer_mark)
-    |> score_for(depth)
+  def score(board, mark, depth) do
+    case Board.winning_mark(board) do
+      ^mark -> depth
+      :no_winner -> 0
+      _ -> -depth
+    end
   end
 
-  defp winning_player(winner, computer) when winner == computer, do: {:ok, :computer}
-  defp winning_player(winner, _) when winner == :no_winner, do: {:ok, :draw}
-  defp winning_player(_, _), do: {:ok, :opponent}
-
-  defp score_for({_, :computer}, depth), do: depth
-  defp score_for({_, :opponent}, depth), do: -depth
-  defp score_for({_, :draw}, _), do: 0
-
-  defp switch(mark), do: if (mark == "X"), do: "O", else: "X"
+  defp switch("X"), do: "O"
+  defp switch("O"), do: "X"
 
   defp starting_score(current_mark, computer_mark) do
     if (current_mark == computer_mark), do: -1000, else: 1000
