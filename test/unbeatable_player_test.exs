@@ -6,7 +6,7 @@ defmodule UnbeatablePlayerTest do
       "O","O","O",
       "X","X", 6,
        7,  8,  9
-    ], 4) == -2.0
+    ], 4) == -5
   end
 
   test "assigns a 0 if the game is a draw" do
@@ -22,7 +22,7 @@ defmodule UnbeatablePlayerTest do
       "X","O","X",
        4, "O","O",
       "X","X", 9
-    ], "O")
+    ])
     assert Board.position_available?(next_board, 4) == {:taken, 4}
   end
 

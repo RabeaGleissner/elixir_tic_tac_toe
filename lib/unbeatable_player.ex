@@ -4,7 +4,7 @@ defmodule UnbeatablePlayer do
   @initial_score 10.0
   @move_placehoder -1
 
-  def make_move(board, _) do
+  def make_move(board) do
     Board.place_mark(board, calculate_move(board))
   end
 
@@ -68,7 +68,7 @@ defmodule UnbeatablePlayer do
   end
 
   def score(board, depth) do
-    if Board.winner?(board), do: -10 / (depth + 1), else: 0
+    if Board.winner?(board), do: -(depth + 1), else: 0
   end
 
   defp finish_calculation?(board, depth), do: if Board.game_over?(board) || depth == 0, do: :finish, else: :continue
