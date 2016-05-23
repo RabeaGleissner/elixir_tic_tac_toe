@@ -18,7 +18,10 @@ defmodule UnbeatablePlayer do
     |> result(current_board, depth, {alpha, beta})
   end
 
-  defp result(:finish, board, depth, _), do: %{:best_score => score(board, depth), :best_move => @move_placehoder}
+  defp result(:finish, board, depth, _) do
+    %{:best_score => score(board, depth), :best_move => @move_placehoder}
+  end
+
   defp result(:continue, board, depth, {alpha, beta}) do
     board
     |> Board.available_positions
@@ -68,7 +71,11 @@ defmodule UnbeatablePlayer do
   end
 
   def score(board, depth) do
-    if Board.winner?(board), do: -(depth + 1), else: 0
+    if Board.winner?(board) do
+      -(depth + 1)
+    else
+      0
+    end
   end
 
   defp finish_calculation?(board, depth), do: if Board.game_over?(board) || depth == 0, do: :finish, else: :continue
