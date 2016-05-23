@@ -18,7 +18,7 @@ defmodule UnbeatablePlayer do
     |> result(current_board, depth, {alpha, beta})
   end
 
-  defp result(:finish, board, _, _), do: %{:best_score => score(board), :best_move => @move_placehoder}
+  defp result(:finish, board, depth, _), do: %{:best_score => score(board, depth), :best_move => @move_placehoder}
   defp result(:continue, board, depth, {alpha, beta}) do
     board
     |> Board.available_positions
@@ -31,13 +31,16 @@ defmodule UnbeatablePlayer do
     if current_best[:alpha] >= current_best[:beta] do
       current_best
     else
-      negate_score(negamax(board, depth - 1, -current_best[:beta], -current_best[:alpha]))
+      board
+      |> Board.place_mark(move)
+      |> negamax(depth - 1, -current_best[:beta], -current_best[:alpha])
+      |> negate_score
       |> better_score?(current_best)
       |> update_score(move)
     end
   end
 
-  defp update_score({false, new_result, current_best}, move), do: current_best
+  defp update_score({false, _, current_best}, _), do: current_best
   defp update_score({true, new_result, current_best}, move) do
     %{
       :best_score => new_result[:best_score] ,
@@ -64,8 +67,8 @@ defmodule UnbeatablePlayer do
     }
   end
 
-  def score(board) do
-    if Board.winner?(board), do: 1, else: 0
+  def score(board, depth) do
+    if Board.winner?(board), do: -10 / (depth + 1), else: 0
   end
 
   defp finish_calculation?(board, depth), do: if Board.game_over?(board) || depth == 0, do: :finish, else: :continue
