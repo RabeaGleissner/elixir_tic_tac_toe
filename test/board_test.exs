@@ -17,7 +17,7 @@ defmodule BoardTest do
   end
 
   test "places mark on empty board" do
-    assert Board.place_mark(@empty_3_by_3_board, 1) == {:ok, ["X",2,3,4,5,6,7,8,9]}
+    assert Board.place_mark(@empty_3_by_3_board, 1) == ["X",2,3,4,5,6,7,8,9]
   end
 
   test "cannot place mark in a position that is taken" do
@@ -75,6 +75,14 @@ defmodule BoardTest do
       "X", "O", 6,
       "X", "X","O"
     ]) == "O"
+  end
+
+  test "returns default of :no_winner if there isn't one" do
+    assert Board.winning_mark([
+      "O",  2,  3,
+      "X", "O", 6,
+      "X", "X", 9
+    ]) == :no_winner
   end
 
   test "knows that board is a draw" do
