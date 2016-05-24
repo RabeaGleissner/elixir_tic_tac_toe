@@ -38,23 +38,21 @@ defmodule UnbeatablePlayer do
       |> Board.place_mark(move)
       |> negamax(depth - 1, -current_best[:beta], -current_best[:alpha])
       |> negate_score
-      |> better_score?(current_best)
-      |> update_score(move)
+      |> find_better_score(current_best, move)
     end
   end
 
-  defp update_score({false, _, current_best}, _), do: current_best
-  defp update_score({true, new_result, current_best}, move) do
-    %{
-      :best_score => new_result[:best_score] ,
-      :best_move => move,
-      :alpha => new_result[:best_score],
-      :beta => current_best[:beta],
-    }
-  end
-
-  defp better_score?(new_score, old_score) do
-    {new_score[:best_score] > old_score[:alpha], new_score, old_score}
+  defp find_better_score(new_result, current_best, move) do
+    if new_result[:best_score] > current_best[:alpha] do
+      %{
+        :best_score => new_result[:best_score] ,
+        :best_move => move,
+        :alpha => new_result[:best_score],
+        :beta => current_best[:beta],
+      }
+    else
+      current_best
+    end
   end
 
   defp negate_score(result) do

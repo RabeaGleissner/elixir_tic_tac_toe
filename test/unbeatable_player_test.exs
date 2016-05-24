@@ -1,7 +1,7 @@
 defmodule UnbeatablePlayerTest do
   use ExUnit.Case
 
-  test "assigns a 1 if it is a winning board" do
+  test "assigns a score if it is a winning board" do
     assert UnbeatablePlayer.score([
       "O","O","O",
       "X","X", 6,
