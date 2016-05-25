@@ -9,7 +9,7 @@ defmodule UnbeatablePlayer do
   end
 
   def calculate_move(board) do
-    negamax(board, Enum.count(Board.available_positions(board)), @initial_alpha, @initial_beta)[:best_move]
+    negamax(board, 7, @initial_alpha, @initial_beta)[:best_move]
   end
 
   def negamax(current_board, depth, alpha, beta) do
